@@ -3,339 +3,248 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Food Facts Finder | Nutrition Facts & Calories</title>
-  <meta name="description" content="Instantly search nutrition facts, calories, macros, and % Daily Values for any food. Copy or share your results easily.">
-  <meta name="theme-color" content="#009578">
+  <meta name="description" content="Search nutrition facts for your favorite foods — calories, fat, carbs, protein, sugar, fiber and more!">
+  <meta name="keywords" content="food nutrition, calories, food facts finder, nutrition info, calorie lookup">
+  <meta name="theme-color" content="#1e1e1e">
+  <title>Food Facts Finder 🥗</title>
+
+  <!-- 🥗 Emoji favicon -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🥗</text></svg>">
 
   <style>
     :root {
-      --bg: #f9fafb;
-      --text: #111;
+      --bg: #ffffff;
+      --text: #222;
       --accent: #009578;
-      --border: #ddd;
-      --card-bg: #fff;
+      --accent-hover: #007a63;
+      --card-bg: #f4f4f4;
     }
 
-    body.dark {
-      --bg: #111827;
-      --text: #f3f4f6;
-      --accent: #22c55e;
-      --border: #374151;
-      --card-bg: #1f2937;
+    [data-theme="dark"] {
+      --bg: #1e1e1e;
+      --text: #e0e0e0;
+      --accent: #00c98d;
+      --accent-hover: #00b17b;
+      --card-bg: #2a2a2a;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      margin: 0;
     }
 
     body {
-      font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
-      background: var(--bg);
+      font-family: "Inter", sans-serif;
+      background-color: var(--bg);
       color: var(--text);
-      margin: 0;
       display: flex;
       flex-direction: column;
+      justify-content: space-between;
       align-items: center;
-      padding: 40px 20px;
-      min-height: 100vh;
-      transition: background 0.3s ease, color 0.3s ease;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    header {
+      padding: 24px 0 8px;
+      text-align: center;
     }
 
     h1 {
-      font-size: 1.9rem;
-      margin-bottom: 6px;
-      text-align: center;
-      font-weight: 700;
+      font-size: 1.8rem;
+      margin-bottom: 4px;
     }
 
-    p {
-      color: #555;
-      text-align: center;
-      margin-bottom: 25px;
-      line-height: 1.4;
-      max-width: 480px;
-    }
-
-    body.dark p {
-      color: #d1d5db;
-    }
-
-    .theme-toggle {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 6px 12px;
-      font-size: 0.9rem;
-      cursor: pointer;
-      color: var(--text);
-      transition: 0.3s ease;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-
-    .theme-toggle:hover {
-      background: var(--accent);
-      color: #fff;
+    .container {
+      width: 100%;
+      max-width: 600px;
+      padding: 16px;
     }
 
     input {
       width: 100%;
-      max-width: 420px;
-      padding: 12px 16px;
+      padding: 12px;
       border: 1px solid #ccc;
-      border-radius: 12px;
+      border-radius: 10px;
       font-size: 1rem;
-      margin-bottom: 25px;
-      outline: none;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-      transition: 0.2s ease;
-    }
-
-    input:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(0,149,120,0.15);
-    }
-
-    body.dark input {
-      background: #374151;
-      border-color: #4b5563;
-      color: #f9fafb;
-    }
-
-    .nutrition-facts {
-      background: var(--card-bg);
-      border-radius: 16px;
-      width: 100%;
-      max-width: 400px;
-      padding: 20px;
-      box-shadow: 0 2px 15px rgba(0,0,0,0.08);
-      display: none;
-      animation: fadeIn 0.3s ease;
-    }
-
-    .nutrition-facts h2 {
-      font-size: 1.5rem;
-      margin-bottom: 8px;
-      font-weight: 800;
-      text-align: center;
-      border-bottom: 4px solid var(--accent);
-      padding-bottom: 6px;
-    }
-
-    .food-title {
-      font-weight: 600;
-      margin-top: 10px;
-      text-align: center;
+      margin-bottom: 16px;
+      background-color: var(--card-bg);
       color: var(--text);
     }
 
-    .calories {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      font-size: 1.7rem;
-      font-weight: 800;
-      margin: 12px 0;
-    }
-
-    .nutrient {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.95rem;
-      margin: 6px 0;
-      padding-bottom: 4px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .nutrient span:last-child {
-      text-align: right;
-      color: var(--text);
-    }
-
-    .dv {
-      font-size: 0.8rem;
-      color: var(--accent);
-      margin-left: 4px;
-      font-weight: 600;
-    }
-
-    .footer {
-      font-size: 0.75rem;
-      color: #888;
-      margin-top: 15px;
-      border-top: 2px solid var(--border);
-      padding-top: 8px;
-      line-height: 1.3;
-      text-align: center;
-    }
-
-    .buttons {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin-top: 18px;
-    }
-
-    .btn {
-      flex: 1;
-      padding: 10px 12px;
+    button {
+      padding: 10px 16px;
       border: none;
       border-radius: 8px;
       cursor: pointer;
+      font-size: 15px;
+      background: var(--accent);
       color: #fff;
-      font-weight: 600;
-      font-size: 0.9rem;
-      transition: 0.2s ease;
+      transition: background 0.3s;
     }
 
-    .btn-copy { background-color: var(--accent); }
-    .btn-share { background-color: #444; }
-    .btn:hover { opacity: 0.9; transform: scale(1.02); }
-
-    .loading {
-      color: #555;
-      font-size: 0.9rem;
-      margin-top: 5px;
+    button:hover {
+      background: var(--accent-hover);
     }
 
-    body.dark .loading {
-      color: #ccc;
+    .result-box {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      margin-top: 12px;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+      border-radius: 12px;
+      overflow: hidden;
     }
 
-    @media (max-width: 500px) {
-      body { padding: 30px 16px; }
-      h1 { font-size: 1.6rem; }
-      input { font-size: 0.95rem; }
-      .nutrition-facts { padding: 16px; }
-      .calories { font-size: 1.4rem; }
-      .nutrient { font-size: 0.9rem; }
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid #4443;
+      text-align: left;
+    }
+
+    th {
+      background-color: var(--accent);
+      color: #fff;
+    }
+
+    footer {
+      width: 100%;
+      text-align: center;
+      padding: 20px 0;
+    }
+
+    #toggle-dark {
+      background: var(--accent);
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      border: none;
+      font-size: 15px;
+      transition: background 0.3s;
+    }
+
+    #toggle-dark:hover {
+      background: var(--accent-hover);
     }
   </style>
 </head>
-
 <body>
-  <button class="theme-toggle" id="themeToggle">🌙 Dark</button>
-  <h1>🥗 Food Facts Finder</h1>
-  <p>Search any food to view, copy, or share its complete nutrition facts and % Daily Values.</p>
+  <header>
+    <h1>🥗 Food Facts Finder</h1>
+    <p>Search nutrition facts for any food below</p>
+  </header>
 
-  <input type="text" id="search" placeholder="e.g. apple, chicken breast, fried rice" />
-  <div class="loading" id="loading" style="display:none;">Fetching data...</div>
-  <div class="nutrition-facts" id="result"></div>
+  <main class="container">
+    <input type="text" id="foodInput" placeholder="e.g., banana, grilled chicken, rice">
+    <div id="resultBox" class="result-box">Type a food above to see nutrition facts.</div>
+  </main>
+
+  <footer>
+    <button id="toggle-dark">🌓 Toggle Dark Mode</button>
+  </footer>
 
   <script>
-    // Theme toggle logic
-    const themeToggle = document.getElementById("themeToggle");
-    const userPref = localStorage.getItem("theme");
-    if (userPref === "dark" || (!userPref && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
-      document.body.classList.add("dark");
-      themeToggle.textContent = "☀️ Light";
-    }
+    const foodInput = document.getElementById("foodInput");
+    const resultBox = document.getElementById("resultBox");
+    const darkToggle = document.getElementById("toggle-dark");
 
-    themeToggle.addEventListener("click", () => {
-      document.body.classList.toggle("dark");
-      const isDark = document.body.classList.contains("dark");
-      themeToggle.textContent = isDark ? "☀️ Light" : "🌙 Dark";
-      localStorage.setItem("theme", isDark ? "dark" : "light");
-    });
+    const API_KEY = "YOUR_CALORIENINJAS_API_KEY"; // replace with your key
 
-    const searchInput = document.getElementById("search");
-    const resultBox = document.getElementById("result");
-    const loading = document.getElementById("loading");
-
-    async function fetchNutrition(foodName) {
-      const url = `/.netlify/functions/fetchNutrition?query=${encodeURIComponent(foodName)}`;
+    async function getFoodData(food) {
+      resultBox.innerHTML = "Searching...";
       try {
-        loading.style.display = "block";
-        resultBox.style.display = "none";
+        const res = await fetch(`https://api.calorieninjas.com/v1/nutrition?query=${encodeURIComponent(food)}`, {
+          headers: { "X-Api-Key": API_KEY }
+        });
+        const data = await res.json();
 
-        const response = await fetch(url);
-        const data = await response.json();
-
-        if (data.items && data.items.length > 0) {
-          const food = data.items[0];
-          showResult(food);
-        } else {
-          resultBox.innerHTML = "<p>No results found. Try a different food.</p>";
-          resultBox.style.display = "block";
+        if (!data.items || data.items.length === 0) {
+          resultBox.innerHTML = "No results found. Try a different food.";
+          return;
         }
-      } catch (error) {
-        resultBox.innerHTML = "<p>Error fetching data. Please try again.</p>";
-        resultBox.style.display = "block";
-      } finally {
-        loading.style.display = "none";
+
+        showResult(data.items[0]);
+      } catch (err) {
+        resultBox.innerHTML = "⚠️ Error fetching data. Please try again.";
       }
     }
 
     function showResult(food) {
-      resultBox.style.display = "block";
-      const dv = {
-        fat: (food.fat_total_g / 78) * 100,
-        cholesterol: (food.cholesterol_mg / 300) * 100,
-        sodium: (food.sodium_mg / 2300) * 100,
-        carbs: (food.carbohydrates_total_g / 275) * 100,
-        fiber: (food.fiber_g / 28) * 100,
-        protein: (food.protein_g / 50) * 100
-      };
+      resultBox.innerHTML = `
+        <h2>${food.name.toUpperCase()}</h2>
+        <table>
+          <tr><th>Nutrient</th><th>Amount (per ${food.serving_size_g || 100}g)</th></tr>
+          <tr><td>Calories</td><td>${food.calories.toFixed(0)} kcal</td></tr>
+          <tr><td>Protein</td><td>${food.protein_g.toFixed(1)} g</td></tr>
+          <tr><td>Total Fat</td><td>${food.fat_total_g.toFixed(1)} g</td></tr>
+          <tr><td>Cholesterol</td><td>${food.cholesterol_mg.toFixed(0)} mg</td></tr>
+          <tr><td>Sodium</td><td>${food.sodium_mg.toFixed(0)} mg</td></tr>
+          <tr><td>Total Carbohydrates</td><td>${food.carbohydrates_total_g.toFixed(1)} g</td></tr>
+          <tr><td>Sugar</td><td>${food.sugar_g.toFixed(1)} g</td></tr>
+          <tr><td>Fiber</td><td>${food.fiber_g.toFixed(1)} g</td></tr>
+        </table>
+        <button id="copyBtn">📋 Copy Nutrition</button>
+        <button id="shareBtn" style="margin-left:10px;">🔗 Share</button>
+      `;
 
       const nutritionText = `
 ${food.name.toUpperCase()}
 Calories: ${food.calories.toFixed(0)} kcal
-Total Fat: ${food.fat_total_g.toFixed(1)} g (${dv.fat.toFixed(0)}% DV)
-Cholesterol: ${food.cholesterol_mg.toFixed(0)} mg (${dv.cholesterol.toFixed(0)}% DV)
-Sodium: ${food.sodium_mg.toFixed(0)} mg (${dv.sodium.toFixed(0)}% DV)
-Carbohydrates: ${food.carbohydrates_total_g.toFixed(1)} g (${dv.carbs.toFixed(0)}% DV)
-Fiber: ${food.fiber_g.toFixed(1)} g (${dv.fiber.toFixed(0)}% DV)
+Protein: ${food.protein_g.toFixed(1)} g
+Fat: ${food.fat_total_g.toFixed(1)} g
+Cholesterol: ${food.cholesterol_mg.toFixed(0)} mg
+Sodium: ${food.sodium_mg.toFixed(0)} mg
+Carbs: ${food.carbohydrates_total_g.toFixed(1)} g
 Sugar: ${food.sugar_g.toFixed(1)} g
-Protein: ${food.protein_g.toFixed(1)} g (${dv.protein.toFixed(0)}% DV)
+Fiber: ${food.fiber_g.toFixed(1)} g
 Serving Size: ${food.serving_size_g || 100} g
 `;
 
-      resultBox.innerHTML = `
-        <h2>Nutrition Facts</h2>
-        <div class="food-title">${food.name.toUpperCase()}</div>
-        <div class="calories"><span>Calories</span><span>${food.calories.toFixed(0)}</span></div>
-
-        <div class="nutrient"><span>Total Fat</span><span>${food.fat_total_g.toFixed(1)} g <span class="dv">${dv.fat.toFixed(0)}%</span></span></div>
-        <div class="nutrient"><span>Cholesterol</span><span>${food.cholesterol_mg.toFixed(0)} mg <span class="dv">${dv.cholesterol.toFixed(0)}%</span></span></div>
-        <div class="nutrient"><span>Sodium</span><span>${food.sodium_mg.toFixed(0)} mg <span class="dv">${dv.sodium.toFixed(0)}%</span></span></div>
-        <div class="nutrient"><span>Total Carbohydrates</span><span>${food.carbohydrates_total_g.toFixed(1)} g <span class="dv">${dv.carbs.toFixed(0)}%</span></span></div>
-        <div class="nutrient"><span>Dietary Fiber</span><span>${food.fiber_g.toFixed(1)} g <span class="dv">${dv.fiber.toFixed(0)}%</span></span></div>
-        <div class="nutrient"><span>Total Sugars</span><span>${food.sugar_g.toFixed(1)} g</span></div>
-        <div class="nutrient"><span>Protein</span><span>${food.protein_g.toFixed(1)} g <span class="dv">${dv.protein.toFixed(0)}%</span></span></div>
-
-        <div class="footer">
-          *Serving size: ${food.serving_size_g ? food.serving_size_g + " g" : "100 g"}<br>
-          *Percent Daily Values (%DV) are based on a 2,000 calorie diet.
-        </div>
-
-        <div class="buttons">
-          <button id="copyBtn" class="btn btn-copy">📋 Copy</button>
-          <button id="shareBtn" class="btn btn-share">🔗 Share</button>
-        </div>
-      `;
-
       document.getElementById("copyBtn").onclick = () => {
         navigator.clipboard.writeText(nutritionText);
-        alert("Nutrition facts copied! You can paste them into Lose It or anywhere else.");
+        alert("Nutrition facts copied! 🥗");
       };
 
       document.getElementById("shareBtn").onclick = async () => {
-        const shareData = { title: "Food Facts Finder", text: nutritionText, url: window.location.href };
-        if (navigator.share) await navigator.share(shareData);
-        else alert("Sharing not supported on this device. You can copy instead.");
+        const shareData = {
+          title: "Food Facts Finder",
+          text: nutritionText,
+          url: window.location.href
+        };
+        if (navigator.share) {
+          await navigator.share(shareData);
+        } else {
+          alert("Sharing not supported on this device. You can copy instead.");
+        }
       };
     }
 
-    let typingTimer;
-    searchInput.addEventListener("input", () => {
-      clearTimeout(typingTimer);
-      const query = searchInput.value.trim();
-      if (query.length > 2) typingTimer = setTimeout(() => fetchNutrition(query), 600);
+    foodInput.addEventListener("keydown", e => {
+      if (e.key === "Enter") getFoodData(foodInput.value.trim());
     });
+
+    // Dark mode toggle
+    darkToggle.addEventListener("click", () => {
+      const theme = document.body.getAttribute("data-theme") === "dark" ? "" : "dark";
+      document.body.setAttribute("data-theme", theme);
+      localStorage.setItem("theme", theme);
+    });
+
+    // Load saved theme
+    if (localStorage.getItem("theme") === "dark") {
+      document.body.setAttribute("data-theme", "dark");
+    }
   </script>
 </body>
 </html>
