@@ -38,13 +38,13 @@
       transition: background 0.3s ease, color 0.3s ease;
     }
     footer {
-      margin-top: auto;
+      width: 100%;
       text-align: center;
-      padding: 15px 0;
-      color: #777;
+      margin-top: 30px;
       font-size: 0.85rem;
-      justify-content: center;
+      color: #777;
     }
+
 
 
     /* Smooth fade animation when switching themes */
@@ -86,7 +86,9 @@
       box-shadow: 0 3px 8px rgba(0,0,0,0.15);
       z-index: 10;
     }
-
+    body.dark footer {
+      color: #aaa;
+    }
     .theme-toggle:hover {
       background: var(--accent);
       color: #fff;
@@ -398,6 +400,7 @@ Serving Size: ${food.serving_size_g || 100} g
 
 </body>
 </html>
+
 
 
 
