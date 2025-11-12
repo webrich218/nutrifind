@@ -6,7 +6,8 @@
   <title>Food Facts Finder | Nutrition Facts & Calories</title>
   <meta name="description" content="Instantly search nutrition facts, calories, macros, and % Daily Values for any food. Copy or share your results easily.">
   <meta name="theme-color" content="#009578">
-  
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🥗</text></svg>">
+
   <style>
     :root {
       --bg: #f9fafb;
@@ -25,42 +26,17 @@
     }
 
     body {
-  margin: 0;
-  padding: 0;
-  font-family: "Inter", sans-serif;
-  background-color: var(--bg);
-  color: var(--text);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 100vh;
-  transition: background 0.3s, color 0.3s;
-}
-
-/* Add spacing for mobile */
-.container {
-  width: 100%;
-  max-width: 600px;
-  padding: 16px;
-  box-sizing: border-box;
-}
-
-/* Make input and results not hug the edges */
-input, .result-box {
-  width: 100%;
-  border-radius: 10px;
-  box-sizing: border-box;
-}
-
-/* Improve table layout */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 10px;
-  border-radius: 12px;
-  overflow: hidden;
-}
-
+      font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px 100px;
+      min-height: 100vh;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
 
     h1 {
       font-size: 1.9rem;
@@ -77,23 +53,24 @@ table {
       max-width: 480px;
     }
 
-    body.dark p {
-      color: #d1d5db;
-    }
+    body.dark p { color: #d1d5db; }
 
+    /* Sticky theme toggle button */
     .theme-toggle {
-      position: absolute;
-      top: 20px;
-      right: 20px;
+      position: fixed;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
       background: var(--card-bg);
       border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 6px 12px;
-      font-size: 0.9rem;
+      border-radius: 25px;
+      padding: 10px 18px;
+      font-size: 1rem;
       cursor: pointer;
       color: var(--text);
       transition: 0.3s ease;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+      z-index: 10;
     }
 
     .theme-toggle:hover {
@@ -104,7 +81,7 @@ table {
     input {
       width: 100%;
       max-width: 420px;
-      padding: 12px 16px;
+      padding: 14px 16px;
       border: 1px solid #ccc;
       border-radius: 12px;
       font-size: 1rem;
@@ -221,9 +198,7 @@ table {
       margin-top: 5px;
     }
 
-    body.dark .loading {
-      color: #ccc;
-    }
+    body.dark .loading { color: #ccc; }
 
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(8px); }
@@ -231,36 +206,13 @@ table {
     }
 
     @media (max-width: 500px) {
-      body { padding: 30px 16px; }
+      body { padding: 24px 16px 100px; }
       h1 { font-size: 1.6rem; }
       input { font-size: 0.95rem; }
       .nutrition-facts { padding: 16px; }
       .calories { font-size: 1.4rem; }
       .nutrient { font-size: 0.9rem; }
     }
-    #toggle-dark {
-  margin-top: auto;
-  padding: 10px 16px;
-  border: none;
-  border-radius: 8px;
-  background: var(--accent);
-  color: #fff;
-  cursor: pointer;
-  font-size: 15px;
-  transition: background 0.3s;
-}
-
-#toggle-dark:hover {
-  background: var(--accent-hover);
-}
-
-/* Optional: Center it horizontally at the bottom */
-footer {
-  width: 100%;
-  text-align: center;
-  padding: 20px 0;
-}
-
   </style>
 </head>
 
@@ -271,6 +223,9 @@ footer {
   <input type="text" id="search" placeholder="e.g. apple, chicken breast, fried rice" />
   <div class="loading" id="loading" style="display:none;">Fetching data...</div>
   <div class="nutrition-facts" id="result"></div>
+
+  <!-- Sticky dark mode button -->
+  <button class="theme-toggle" id="themeToggle">🌙 Dark</button>
 
   <script>
     // Theme toggle logic
@@ -383,11 +338,5 @@ Serving Size: ${food.serving_size_g || 100} g
       if (query.length > 2) typingTimer = setTimeout(() => fetchNutrition(query), 600);
     });
   </script>
-  
-  <footer>
-  <button id="toggle-dark">🌓 Toggle Dark Mode</button>
-</footer>
-
 </body>
 </html>
-
