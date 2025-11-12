@@ -302,7 +302,7 @@
     const loading = document.getElementById("loading");
 
     async function fetchNutrition(foodName) {
-      const url = `/.netlify/functions/fetchNutrition?query=${encodeURIComponent(foodName)}`;
+     const url = `/api/nutrition?query=${encodeURIComponent(foodName)}`;
       try {
         loading.style.display = "block";
         resultBox.style.display = "none";
@@ -390,6 +390,7 @@ Serving Size: ${food.serving_size_g || 100} g
   </script>
 </body>
 </html>
+
 
 
 
