@@ -238,7 +238,7 @@
     <div class="nutrition-facts" id="result"></div>
   </div>
 
-  <button class="theme-toggle" id="themeToggle">🌙 Dark</button>
+  <!--button class="theme-toggle" id="themeToggle">🌙 Dark</button-->
 
   <script>
     const themeToggle = document.getElementById("themeToggle");
@@ -351,5 +351,44 @@ Serving Size: ${food.serving_size_g || 100} g
       if (query.length > 2) typingTimer = setTimeout(() => fetchNutrition(query), 600);
     });
   </script>
+  <!-- Footer with Dark Mode Toggle -->
+<footer style="
+  width: 100%;
+  max-width: 800px;
+  margin: 40px auto 0;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--text);
+  border-top: 1px solid var(--border);
+  padding: 20px 14px 26px;
+  background: var(--card-bg);
+  border-radius: 16px 16px 0 0;
+  box-shadow: 0 -1px 6px rgba(0,0,0,0.06);
+  position: relative;
+">
+  <p>© 2025 <strong>Food Facts Finder</strong> · Nutrition data powered by CalorieNinjas API</p>
+  <p>
+    <a href="legal.html" style="color: var(--accent); text-decoration: none; font-weight: 600;">
+      About · Privacy · Terms · Contact
+    </a>
+  </p>
+
+  <button id="themeToggle" style="
+    margin-top: 10px;
+    background: var(--accent);
+    border: none;
+    border-radius: 20px;
+    padding: 8px 18px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    color: #fff;
+    font-weight: 600;
+    transition: 0.2s ease;
+  ">
+    🌙 Dark Mode
+  </button>
+</footer>
+
 </body>
 </html>
+
