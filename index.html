@@ -218,7 +218,7 @@
   };
 
   /* ----------------------------------------
-     SERVING SIZE LOOKUP TABLE (Option B)
+     SERVING SIZE LOOKUP TABLE
   ---------------------------------------- */
   const weightLookup = {
     "apple": { piece: 182 },
@@ -266,12 +266,13 @@
      FETCH DATA
   ---------------------------------------- */
   const searchInput = document.getElementById("search");
-  const qtyInput = document.getElementById("qty");
-  const unitInput = document.getElementById("unit");
-  const resultBox = document.getElementById("result");
-  const loading = document.getElementById("loading");
+  const qtyInput    = document.getElementById("qty");
+  const unitInput   = document.getElementById("unit");
+  const resultBox   = document.getElementById("result");
+  const loading     = document.getElementById("loading");
 
   let typingTimer;
+  let lastFoodItem = null;
 
   searchInput.addEventListener("input", () => {
     clearTimeout(typingTimer);
@@ -297,7 +298,8 @@
         return;
       }
 
-      showResult(data.items[0]);
+      lastFoodItem = data.items[0];
+      showResult(lastFoodItem);
     } catch {
       resultBox.innerHTML = "<p>Error fetching data.</p>";
       resultBox.style.display = "block";
@@ -305,6 +307,17 @@
 
     loading.style.display = "none";
   }
+
+  /* ----------------------------------------
+     UPDATE RESULT WHEN USER CHANGES QTY / UNIT
+  ---------------------------------------- */
+  qtyInput.addEventListener("input", () => {
+    if (lastFoodItem) showResult(lastFoodItem);
+  });
+
+  unitInput.addEventListener("change", () => {
+    if (lastFoodItem) showResult(lastFoodItem);
+  });
 
   /* ----------------------------------------
      NUTRITION RENDERING + CONVERSION
@@ -340,14 +353,6 @@
       return qty * 100;
     }
 
-    // AUTO MODE
-    if (unit === "auto") {
-      if (food?.piece) return qty * food.piece;
-      if (food?.cup) return qty * food.cup;
-      if (food?.tbsp) return qty * food.tbsp;
-      return qty * 100;
-    }
-
     return qty * 100;
   }
 
@@ -359,15 +364,6 @@
     const scale = grams / 100;
 
     const c = (v) => (v * scale).toFixed(1);
-
-    const dv = {
-      fat: (c(food.fat_total_g) / 78) * 100,
-      cholesterol: (c(food.cholesterol_mg) / 300) * 100,
-      sodium: (c(food.sodium_mg) / 2300) * 100,
-      carbs: (c(food.carbohydrates_total_g) / 275) * 100,
-      fiber: (c(food.fiber_g) / 28) * 100,
-      protein: (c(food.protein_g) / 50) * 100
-    };
 
     resultBox.style.display = "block";
     resultBox.innerHTML = `
@@ -414,4 +410,3 @@
 
 </body>
 </html>
-
