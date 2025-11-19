@@ -1,210 +1,360 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NutriFind | Nutrition Facts & Calories</title>
-  <meta name="description" content="NutriFind helps you instantly search nutrition facts, calories, macros, and serving sizes. Copy or share results easily.">
-  <meta name="theme-color" content="#009578">
-  <link rel="icon" type="image/png" href="https://twemoji.maxcdn.com/v/latest/72x72/1f957.png" />
-  <style>
-    :root {
-      --bg: #f9fafb;
-      --text: #111;
-      --accent: #009578;
-      --border: #ddd;
-      --card-bg: #fff;
-    }
-    body.dark {
-      --bg: #111827;
-      --text: #f3f4f6;
-      --accent: #22c55e;
-      --border: #374151;
-      --card-bg: #1f2937;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NutriFind – Nutrition Facts & Calorie Checker</title>
+<style>
     body {
-      font-family: 'Inter', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      margin: 0;
-      padding: 40px 20px 100px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
+        font-family: Arial, sans-serif;
+        background: #f5f7f8;
+        margin: 0;
+        padding: 0;
+        color: #222;
+        line-height: 1.6;
     }
-    h1 { text-align:center; margin-bottom:6px; }
-    p { text-align:center; color:#666; }
-    body.dark p { color:#ccc; }
-    #themeToggle {
-      position:fixed; bottom:20px; left:50%; transform:translateX(-50%);
-      background:var(--card-bg); border:1px solid var(--border);
-      padding:10px 18px; border-radius:25px; cursor:pointer;
+
+    header {
+        text-align: center;
+        padding: 30px 20px 10px;
     }
-    .container { width:100%; max-width:450px; padding:0 12px; }
+    header img {
+        width: 50px;
+        margin-bottom: 5px;
+    }
+    header h1 {
+        font-size: 32px;
+        margin: 5px 0 10px;
+    }
+    .subtitle {
+        font-size: 15px;
+        color: #555;
+        margin-bottom: 20px;
+    }
+
+    /* FORM SECTION */
+    .container {
+        max-width: 600px;
+        margin: auto;
+        padding: 0 20px 40px;
+    }
+
+    .input-group {
+        margin-bottom: 15px;
+        display: flex;
+        flex-direction: column;
+    }
+
     input, select {
-      width:100%; padding:14px 16px; border-radius:10px;
-      border:1px solid var(--border); margin-bottom:14px;
+        padding: 12px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        width: 100%;
+        box-sizing: border-box;
     }
-    body.dark input, body.dark select { background:#374151; border-color:#4b5563; color:#fff; }
-    .nutrition-facts {
-      background:var(--card-bg); padding:20px; border-radius:16px;
-      box-shadow:0 2px 15px rgba(0,0,0,0.08); margin-top:20px; display:none;
+
+    /* NUTRITION CARD */
+    .card {
+        background: #fff;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        margin-top: 25px;
     }
-    .nutrition-facts h2 {
-      text-align:center; font-weight:800; border-bottom:4px solid var(--accent);
-      padding-bottom:6px;
+
+    .card h2 {
+        text-align: center;
+        margin-bottom: 10px;
     }
-    .calories { display:flex; justify-content:space-between; font-size:1.6rem; font-weight:700; }
-    .nutrient { display:flex; justify-content:space-between; border-bottom:1px solid var(--border); padding:6px 0; }
-    footer { margin-top:40px; text-align:center; font-size:0.85rem; opacity:0.9; }
-    .content-section {
-      max-width:750px;
-      margin-top:50px;
-      line-height:1.6;
+
+    .divider {
+        height: 3px;
+        background: #2e7d32;
+        margin: 10px 0 20px;
     }
-    .content-section h2 {
-      margin-top:35px;
-      color:var(--accent);
+
+    table {
+        width: 100%;
+        font-size: 16px;
+        border-collapse: collapse;
     }
-  </style>
+
+    table td {
+        padding: 6px 0;
+    }
+
+    table td:last-child {
+        text-align: right;
+        color: #111;
+    }
+
+    .serving-note {
+        margin-top: 12px;
+        text-align: center;
+        font-size: 13px;
+        color: #777;
+    }
+
+    .message {
+      background: #fff3cd;
+      color: #856404;
+      border: 1px solid #ffeeba;
+      padding: 10px 12px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+    }
+
+    /* ABOUT SECTION */
+    .about-section {
+        max-width: 700px;
+        margin: 40px auto;
+        padding: 0 20px 50px;
+    }
+
+    .about-section h2 {
+        color: #0a7c36;
+        margin-top: 40px;
+        margin-bottom: 10px;
+        text-align: left;
+    }
+
+    .about-section p {
+        text-align: left;
+        margin: 0 0 18px;
+        color: #444;
+    }
+
+    footer {
+        text-align: center;
+        padding: 20px;
+        font-size: 13px;
+        color: #777;
+    }
+
+    @media (min-width: 800px) {
+      .grid-row { display: grid; grid-template-columns: 1fr 120px 160px; gap:12px; align-items:start; }
+      .input-group { margin-bottom: 0; }
+    }
+</style>
 </head>
 <body>
 
-<h1>🥗 NutriFind</h1>
-<p>Instantly search calories, macros, and nutrition facts.</p>
+<header>
+    <img src="https://cdn-icons-png.flaticon.com/512/1047/1047711.png" alt="Logo">
+    <h1>NutriFind</h1>
+    <div class="subtitle">Instantly search calories, macros, and nutrition facts.</div>
+</header>
 
+<!-- FORM -->
 <div class="container">
-  <input type="text" id="search" placeholder="e.g. apple, chicken breast, rice" />
-  <input type="number" id="qty" min="1" value="1" />
-  <select id="unit">
-    <option value="gram">Grams (g)</option>
-    <option value="ml">Milliliters (ml)</option>
-    <option value="cup">Cup</option>
-    <option value="tbsp">Tablespoon</option>
-    <option value="tsp">Teaspoon</option>
-    <option value="piece">Piece</option>
-    <option value="oz">Ounce (oz)</option>
-  </select>
 
-  <div id="loading" style="display:none; text-align:center;">Loading...</div>
-  <div id="result" class="nutrition-facts"></div>
+    <div id="messageContainer" style="display:none"></div>
+
+    <!-- responsive: on wide screens show inputs in a row -->
+    <div class="grid-row" style="margin-bottom:12px;">
+      <div class="input-group">
+        <input type="text" id="foodInput" placeholder="Search any food (e.g., apple, chicken breast)">
+      </div>
+
+      <div class="input-group">
+        <input type="number" id="amountInput" placeholder="Amount" value="100" min="1">
+      </div>
+
+      <div class="input-group">
+        <select id="unitSelect">
+            <option value="g">Grams (g)</option>
+            <option value="kg">Kilograms (kg)</option>
+            <option value="oz">Ounces (oz)</option>
+            <option value="lb">Pounds (lb)</option>
+            <option value="cup">Cups</option>
+            <option value="tbsp">Tablespoons</option>
+            <option value="tsp">Teaspoons</option>
+            <option value="piece">Piece</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="card" id="resultsCard" style="display:none;">
+        <h2>Nutrition Facts</h2>
+        <div class="divider"></div>
+        <table id="nutritionTable" aria-live="polite"></table>
+        <div class="serving-note" id="servingNote"></div>
+    </div>
+
+</div>
+
+<!-- ABOUT / CONTENT SECTION -->
+<div class="about-section">
+
+    <h2>What is NutriFind?</h2>
+    <p>
+        NutriFind is a fast nutrition checker that lets you search any food and instantly see calories, macros, and nutrition facts. It supports serving sizes like grams, cups, tablespoons, teaspoons, ounces, and pieces.
+    </p>
+
+    <h2>How to Use the Nutrition Calculator</h2>
+    <p>
+        Type any food into the search bar — for example: <strong>egg, apple, fried rice,</strong> or <strong>chicken breast</strong>. Then choose your desired amount and unit. NutriFind automatically converts the serving size into grams for accurate results.
+    </p>
+
+    <h2>Privacy & Terms</h2>
+    <p>
+        NutriFind does not store your personal data. Searches are anonymous and processed only to retrieve nutrition results. By using this site, you agree that the information is for general purposes only and may vary based on preparation, brand, or cooking method.
+    </p>
+
 </div>
 
 <footer>
-  © 2025 NutriFind<br>
-  Nutrition data from CalorieNinjas API<br>
-  <a href="#legal" style="color:var(--accent); font-weight:600;">Legal & Privacy</a>
+    Powered by CalorieNinjas API. NutriFind © 2025
 </footer>
 
-<button id="themeToggle">🌙 Dark Mode</button>
-
-<div class="content-section">
-  <h2>What is NutriFind?</h2>
-  <p>NutriFind is a fast nutrition checker that lets you search any food and instantly see calories, macros, and nutrition facts. It supports serving sizes like grams, cups, tablespoons, teaspoons, ounces, and pieces.</p>
-
-  <h2>How to Use the Nutrition Calculator</h2>
-  <p>Type any food into the search bar — for example: <strong>egg</strong>, <strong>apple</strong>, <strong>fried rice</strong>, or <strong>chicken breast</strong>. Then choose your desired amount and unit. NutriFind automatically converts the serving size into grams for accurate results.</p>
-
-  <h2 id="legal">Privacy & Terms</h2>
-  <p>NutriFind does not store your personal data. Searches are anonymous and processed only to retrieve nutrition results. By using this site, you agree that the information is for general purposes only and may vary based on preparation, brand, or cooking method.</p>
-</div>
-
 <script>
-const toggle = document.getElementById("themeToggle");
-if (localStorage.getItem("theme") === "dark") {
-  document.body.classList.add("dark");
-  toggle.textContent = "☀️ Light";
+// Configuration: if you don't want to expose an API key in client-side code,
+// leave API_KEY empty and make sure you have a server-side /api/nutrition
+// endpoint that calls CalorieNinjas with your secret key (recommended).
+const API_KEY = ""; // <-- OPTIONAL: put your CalorieNinjas key here to call API directly from client
+
+const foodInput = document.getElementById('foodInput');
+const amountInput = document.getElementById('amountInput');
+const unitSelect = document.getElementById('unitSelect');
+const resultsCard = document.getElementById('resultsCard');
+const nutritionTable = document.getElementById('nutritionTable');
+const servingNote = document.getElementById('servingNote');
+const messageContainer = document.getElementById('messageContainer');
+
+let lastFoodData = null;
+let debounceTimer = null;
+
+function showMessage(text, type = 'info'){
+  messageContainer.style.display = 'block';
+  messageContainer.className = 'message';
+  messageContainer.innerText = text;
+  // auto-hide after 6s
+  setTimeout(()=>{ messageContainer.style.display = 'none'; }, 6000);
 }
-toggle.onclick = () => {
-  document.body.classList.toggle("dark");
-  const d = document.body.classList.contains("dark");
-  toggle.textContent = d ? "☀️ Light" : "🌙 Dark";
-  localStorage.setItem("theme", d ? "dark" : "light");
-};
 
-const lookup = {
-  "apple": { piece: 182 },
-  "banana": { piece: 118 },
-  "egg": { piece: 50 },
-  "rice cooked": { cup: 158 }
-};
-
-const search = document.getElementById("search");
-const qty = document.getElementById("qty");
-const unit = document.getElementById("unit");
-const result = document.getElementById("result");
-const loading = document.getElementById("loading");
-let timer;
-
-function convert(name, q, u) {
+function convertToGrams(name, qty, unit) {
+  const lookup = {
+    "apple": { piece: 182 },
+    "banana": { piece: 118 },
+    "egg": { piece: 50 },
+    "rice cooked": { cup: 158 }
+  };
   const food = lookup[name.toLowerCase()];
   const cup = 240, tbsp = 15, tsp = 5, oz = 28.35;
 
-  if (u === "gram" || u === "ml") return q;
-  if (u === "oz") return q * oz;
-
-  if (u === "cup") return food?.cup ? q * food.cup : q * cup;
-  if (u === "tbsp") return q * tbsp;
-  if (u === "tsp") return q * tsp;
-  if (u === "piece") return food?.piece ? q * food.piece : q * 100;
-
-  return q * 100;
+  if (unit === 'g' || unit === 'ml') return qty;
+  if (unit === 'kg') return qty * 1000;
+  if (unit === 'oz') return qty * oz;
+  if (unit === 'lb') return qty * 453.592;
+  if (unit === 'cup') return qty * (food?.cup || cup);
+  if (unit === 'tbsp') return qty * tbsp;
+  if (unit === 'tsp') return qty * tsp;
+  if (unit === 'piece') return qty * (food?.piece || 100);
+  return qty * 100;
 }
 
-search.addEventListener("input", () => {
-  clearTimeout(timer);
-  if (search.value.trim().length < 2) return;
-  timer = setTimeout(() => fetchData(search.value.trim()), 600);
-});
-
-qty.oninput = () => refreshIfVisible();
-unit.onchange = () => refreshIfVisible();
-
-function refreshIfVisible() {
-  if (result.style.display === "block" && window._lastFood) {
-    show(window._lastFood);
+async function getNutritionFromApi(query) {
+  // If client API key is provided, call CalorieNinjas directly
+  if (API_KEY) {
+    const url = `https://api.calorieninjas.com/v1/nutrition?query=${encodeURIComponent(query)}`;
+    const res = await fetch(url, { headers: { 'X-Api-Key': API_KEY } });
+    if (!res.ok) throw new Error(`API error ${res.status}`);
+    return await res.json();
   }
+
+  // Otherwise call local server endpoint (recommended). This assumes you
+  // have a server route /api/nutrition that forwards the request to CalorieNinjas
+  // using a secret API key stored on the server.
+  const localUrl = `/api/nutrition?query=${encodeURIComponent(query)}`;
+  const res = await fetch(localUrl);
+  if (!res.ok) throw new Error(`Local API error ${res.status}`);
+  return await res.json();
 }
 
-async function fetchData(q) {
-  loading.style.display = "block";
-  result.style.display = "none";
+async function fetchNutrition(){
+  const food = foodInput.value.trim();
+  const amount = parseFloat(amountInput.value) || 0;
+  const unit = unitSelect.value;
 
-  const res = await fetch(`/api/nutrition?query=${encodeURIComponent(q)}`);
-  const data = await res.json();
-
-  if (!data.items?.length) {
-    result.innerHTML = "<p>No results.</p>";
-    result.style.display = "block";
-    loading.style.display = "none";
+  if (!food || amount <= 0) {
+    resultsCard.style.display = 'none';
     return;
   }
 
-  const food = data.items[0];
-  window._lastFood = food;
-  show(food);
-  loading.style.display = "none";
+  // Build query: prefer sending amount+unit+food text to API
+  const queryText = `${amount} ${unit} ${food}`;
+
+  try {
+    // show a quick loading message
+    nutritionTable.innerHTML = '';
+    servingNote.innerText = '';
+    resultsCard.style.display = 'block';
+    nutritionTable.innerHTML = '<tr><td>Loading…</td><td></td></tr>';
+
+    const data = await getNutritionFromApi(queryText);
+
+    if (!data || !data.items || data.items.length === 0) {
+      nutritionTable.innerHTML = '<tr><td>No results found.</td><td></td></tr>';
+      return;
+    }
+
+    const item = data.items[0];
+    lastFoodData = item;
+
+    // compute grams for display even if API returns serving_size_g
+    const grams = convertToGrams(item.name || food, amount, unit);
+
+    // render table rows safely (handle missing fields)
+    function val(key, fallback='0'){
+      return (item[key] !== undefined && item[key] !== null) ? item[key] : fallback;
+    }
+
+    nutritionTable.innerHTML = `
+      <tr><td><strong>Calories</strong></td><td><strong>${val('calories')}</strong></td></tr>
+      <tr><td>Fat</td><td>${val('fat_total_g')} g</td></tr>
+      <tr><td>Sodium</td><td>${val('sodium_mg')} mg</td></tr>
+      <tr><td>Carbs</td><td>${val('carbohydrates_total_g')} g</td></tr>
+      <tr><td>Fiber</td><td>${val('fiber_g')} g</td></tr>
+      <tr><td>Sugar</td><td>${val('sugar_g')} g</td></tr>
+      <tr><td>Protein</td><td>${val('protein_g')} g</td></tr>
+    `;
+
+    servingNote.innerText = `Serving: ${amount} ${unit} → approx. ${Math.round(grams)} g`;
+
+  } catch (err) {
+    console.error('Error fetching data:', err);
+
+    // Friendly UI message with guidance if API key missing or server down
+    const isClientKey = !API_KEY ? false : true;
+    const helpText = !API_KEY
+      ? 'Unable to fetch nutrition data. Make sure you have a server-side /api/nutrition route or set an API key in the page (not recommended).'
+      : 'Unable to fetch nutrition data. Check your API key and network.';
+
+    messageContainer.style.display = 'block';
+    messageContainer.className = 'message';
+    messageContainer.innerText = helpText + `\n(${err.message || err})`;
+
+    nutritionTable.innerHTML = '<tr><td>Error retrieving data.</td><td></td></tr>';
+  }
 }
 
-function show(food) {
-  const grams = convert(food.name, parseFloat(qty.value), unit.value);
-  const scale = grams / 100;
-  const c = (x) => (x * scale).toFixed(1);
-
-  result.style.display = "block";
-  result.innerHTML = `
-    <h2>Nutrition Facts</h2>
-    <div class="calories"><span>Calories</span><span>${c(food.calories)}</span></div>
-    <div class="nutrient"><span>Fat</span><span>${c(food.fat_total_g)} g</span></div>
-    <div class="nutrient"><span>Sodium</span><span>${c(food.sodium_mg)} mg</span></div>
-    <div class="nutrient"><span>Carbs</span><span>${c(food.carbohydrates_total_g)} g</span></div>
-    <div class="nutrient"><span>Fiber</span><span>${c(food.fiber_g)} g</span></div>
-    <div class="nutrient"><span>Sugar</span><span>${c(food.sugar_g)} g</span></div>
-    <div class="nutrient"><span>Protein</span><span>${c(food.protein_g)} g</span></div>
-    <p style="margin-top:10px; font-size:0.9rem; opacity:0.8;">Serving: ${qty.value} ${unit.value} → ${grams} g</p>
-  `;
+// debounce handler so we don't call API on every keystroke
+function scheduleFetch(){
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(fetchNutrition, 500);
 }
+
+foodInput.addEventListener('input', scheduleFetch);
+amountInput.addEventListener('input', scheduleFetch);
+unitSelect.addEventListener('change', scheduleFetch);
+
+// On load, show brief hint if no API key configured
+window.addEventListener('load', ()=>{
+  if (!API_KEY) {
+    showMessage('Tip: For production, add a server-side proxy (/api/nutrition) that uses your CalorieNinjas API key so the key is never exposed to the browser.');
+  }
+});
 </script>
 
 </body>
