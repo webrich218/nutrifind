@@ -398,13 +398,10 @@ foodInput.addEventListener('input', scheduleFetch);
 amountInput.addEventListener('input', scheduleFetch);
 unitSelect.addEventListener('change', scheduleFetch);
 
-window.addEventListener('load', ()=>{
-  if (!API_KEY) {
-    showMessage('Tip: Add a server-side proxy to hide your API key.');
-  }
 });
 </script>
 
 </body>
 </html>
+
 
