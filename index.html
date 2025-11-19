@@ -3,298 +3,170 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NutriFind | Nutrition Facts & Calories</title>
-  <meta name="description" content="NutriFind helps you instantly search nutrition facts, calories, macros, and % Daily Values for any food. Copy or share your results easily.">
-  <meta name="theme-color" content="#009578">
-  <link rel="icon" type="image/png" href="https://twemoji.maxcdn.com/v/latest/72x72/1f957.png" />
-  <link rel="apple-touch-icon" href="https://twemoji.maxcdn.com/v/latest/72x72/1f957.png" />
-  
+  <title>NutriFind • Calorie Checker</title>
   <style>
-    :root {
-      --bg: #f9fafb;
-      --text: #111;
-      --accent: #009578;
-      --border: #ddd;
-      --card-bg: #fff;
-    }
-
-    body.dark {
-      --bg: #111827;
-      --text: #f3f4f6;
-      --accent: #22c55e;
-      --border: #374151;
-      --card-bg: #1f2937;
-    }
-
     body {
-      font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
-      background: var(--bg);
-      color: var(--text);
+      font-family: Arial, sans-serif;
       margin: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 40px 20px 100px;
-      min-height: 100vh;
-      transition: background 0.3s ease, color 0.3s ease;
-    }
-
-    /* Smooth fade animation */
-    body.theme-fade {
-      transition: background 0.4s ease, color 0.4s ease, filter 0.4s ease;
-      filter: brightness(1.05);
+      padding: 20px;
+      background: #f7f7f7;
+      color: #333;
     }
 
     h1 {
-      font-size: 1.9rem;
-      margin-bottom: 6px;
       text-align: center;
-      font-weight: 700;
+      margin-bottom: 30px;
     }
-
-    p {
-      color: #555;
-      text-align: center;
-      margin-bottom: 25px;
-      line-height: 1.4;
-      max-width: 480px;
-    }
-
-    body.dark p { color: #d1d5db; }
-
-    /* Sticky dark mode button */
-#themeToggle {
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  padding: 10px 18px;
-  border-radius: 25px;
-  font-size: 0.9rem;
-  cursor: pointer;
-  color: var(--text);
-  z-index: 50;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.12);
-  transition: 0.3s ease;
-}
-
-#themeToggle:hover {
-  background: var(--accent);
-  color: white;
-}
 
     .container {
-      width: 100%;
-      max-width: 430px;
-      padding: 0 16px;
-      box-sizing: border-box;
-    }
-
-    input {
-      width: 100%;
-      padding: 14px 16px;
-      border: 1px solid #ccc;
-      border-radius: 12px;
-      font-size: 1rem;
-      margin-bottom: 25px;
-      outline: none;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-      transition: 0.2s ease;
-      box-sizing: border-box;
-    }
-
-    input:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(0,149,120,0.15);
-    }
-
-    body.dark input {
-      background: #374151;
-      border-color: #4b5563;
-      color: #f9fafb;
-    }
-
-    .nutrition-facts {
-      background: var(--card-bg);
-      border-radius: 16px;
-      width: 100%;
+      max-width: 450px;
+      margin: auto;
+      background: #fff;
       padding: 20px;
-      box-shadow: 0 2px 15px rgba(0,0,0,0.08);
-      display: none;
-      animation: fadeIn 0.3s ease;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
 
-    .nutrition-facts h2 {
-      font-size: 1.5rem;
-      margin-bottom: 8px;
-      font-weight: 800;
+    label {
+      font-weight: bold;
+      display: block;
+      margin: 10px 0 6px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin-bottom: 10px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      background: #0078ff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 5px;
+    }
+
+    button:hover {
+      background: #0063d6;
+    }
+
+    #result {
+      margin-top: 20px;
+      padding: 15px;
+      background: #eef6ff;
+      border-left: 4px solid #0078ff;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+
+    footer {
       text-align: center;
-      border-bottom: 4px solid var(--accent);
-      padding-bottom: 6px;
-    }
-
-    .food-title {
-      font-weight: 600;
-      margin-top: 10px;
-      text-align: center;
-      color: var(--text);
-    }
-
-    .calories {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      font-size: 1.7rem;
-      font-weight: 800;
-      margin: 12px 0;
-    }
-
-    .nutrient {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.95rem;
-      margin: 6px 0;
-      padding-bottom: 4px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .dv {
-      font-size: 0.8rem;
-      color: var(--accent);
-      margin-left: 4px;
-      font-weight: 600;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
+      margin-top: 30px;
+      font-size: 13px;
+      opacity: 0.7;
     }
   </style>
 </head>
 
 <body>
-  <h1>🥗 NutriFind</h1>
-  <p>Instantly look up nutrition facts, calories, and macros for any food.</p>
+  <h1>NutriFind</h1>
 
   <div class="container">
-    <input type="text" id="search" placeholder="e.g. apple, chicken breast, fried rice" />
-    <div class="loading" id="loading" style="display:none;">Fetching data...</div>
-    <div class="nutrition-facts" id="result"></div>
+    <label for="foodInput">Food Name</label>
+    <input type="text" id="foodInput" placeholder="e.g. apple, rice, chicken breast">
+
+    <label for="amountInput">Amount</label>
+    <input type="number" id="amountInput" value="100">
+
+    <label for="unitSelect">Unit</label>
+    <select id="unitSelect">
+      <option value="g">grams (g)</option>
+      <option value="kg">kilograms (kg)</option>
+      <option value="oz">ounces (oz)</option>
+      <option value="lb">pounds (lb)</option>
+      <option value="ml">milliliters (ml)</option>
+      <option value="l">liters (l)</option>
+      <option value="cup">cup</option>
+      <option value="tbsp">tablespoon</option>
+      <option value="tsp">teaspoon</option>
+    </select>
+
+    <button onclick="searchFood()">Check Calories</button>
+
+    <div id="result"></div>
   </div>
 
-  <!-- Updated Footer -->
-  <div class="container">
-    <footer style="width:100%; text-align:center; padding:30px 0 60px; color:var(--text); background:transparent; font-size:0.9rem;">
-      
-      <p>© 2025 <strong>NutriFind</strong></p>
+  <footer>
+    Powered by CaloriesNinja API • nutrifind.fit
+  </footer>
 
-      <p style="font-size:0.75rem; opacity:0.7;">
-        Nutrition data provided by <strong>CalorieNinjas API</strong>
-      </p>
+<script>
+async function searchFood() {
+  const foodName = document.getElementById("foodInput").value.trim();
+  const amount = parseFloat(document.getElementById("amountInput").value);
+  const unit = document.getElementById("unitSelect").value;
 
-      <p>
-        <a href="legal.html" style="color:var(--accent); text-decoration:none; font-weight:600;">
-          About · Privacy · Terms · Contact
-        </a>
-      </p>
-    </footer>
+  if (!foodName) {
+    document.getElementById("result").innerHTML = "Please enter a food name.";
+    return;
+  }
 
-    <!-- Sticky bottom dark mode toggle -->
-    <button id="themeToggle">🌙 Dark Mode</button>
-  </div>
+  // Convert units to grams/ml (estimated common conversions)
+  const unitToGram = {
+    g: 1,
+    kg: 1000,
+    oz: 28.35,
+    lb: 453.6,
+    ml: 1,
+    l: 1000,
+    cup: 240,
+    tbsp: 15,
+    tsp: 5
+  };
 
-  <script>
-    /* THEME TOGGLE */
-    const themeToggle = document.getElementById("themeToggle");
-    const userPref = localStorage.getItem("theme");
+  const convertedAmount = amount * (unitToGram[unit] || 1);
 
-    if (userPref === "dark" || (!userPref && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
-      document.body.classList.add("dark");
-      themeToggle.textContent = "☀️ Light";
-    }
+  const url = `https://api.calorieninjas.com/v1/nutrition?query=${encodeURIComponent(foodName)}`;
 
-    themeToggle.addEventListener("click", () => {
-      document.body.classList.add("theme-fade");
-      setTimeout(() => {
-        document.body.classList.toggle("dark");
-        const isDark = document.body.classList.contains("dark");
-        themeToggle.textContent = isDark ? "☀️ Light" : "🌙 Dark";
-        localStorage.setItem("theme", isDark ? "dark" : "light");
-        setTimeout(() => document.body.classList.remove("theme-fade"), 400);
-      }, 50);
+  try {
+    const response = await fetch(url, {
+      headers: { "X-Api-Key": "YOUR_API_KEY" }
     });
 
-    /* SEARCH & API */
-    const searchInput = document.getElementById("search");
-    const resultBox = document.getElementById("result");
-    const loading = document.getElementById("loading");
+    const data = await response.json();
 
-    async function fetchNutrition(foodName) {
-      const url = `/api/nutrition?query=${encodeURIComponent(foodName)}`;
-      try {
-        loading.style.display = "block";
-        resultBox.style.display = "none";
-
-        const response = await fetch(url);
-        const data = await response.json();
-
-        if (data.items && data.items.length > 0) {
-          showResult(data.items[0]);
-        } else {
-          resultBox.innerHTML = "<p>No results found. Try a different food.</p>";
-          resultBox.style.display = "block";
-        }
-      } catch {
-        resultBox.innerHTML = "<p>Error fetching data. Please try again.</p>";
-        resultBox.style.display = "block";
-      } finally {
-        loading.style.display = "none";
-      }
+    if (!data.items || data.items.length === 0) {
+      document.getElementById("result").innerHTML = "No results found.";
+      return;
     }
 
-    function showResult(food) {
-      resultBox.style.display = "block";
+    const food = data.items[0];
 
-      const dv = {
-        fat: (food.fat_total_g / 78) * 100,
-        cholesterol: (food.cholesterol_mg / 300) * 100,
-        sodium: (food.sodium_mg / 2300) * 100,
-        carbs: (food.carbohydrates_total_g / 275) * 100,
-        fiber: (food.fiber_g / 28) * 100,
-        protein: (food.protein_g / 50) * 100
-      };
+    // Calories per gram from the API's 100g value
+    const caloriesPerGram = food.calories / 100;
 
-      resultBox.innerHTML = `
-        <h2>Nutrition Facts</h2>
-        <div class="food-title">${food.name.toUpperCase()}</div>
+    const totalCalories = caloriesPerGram * convertedAmount;
 
-        <div class="calories"><span>Calories</span><span>${food.calories.toFixed(0)}</span></div>
+    document.getElementById("result").innerHTML = `
+      <strong>${foodName}</strong><br>
+      ${amount} ${unit} ≈ <strong>${Math.round(totalCalories)} calories</strong><br><br>
+      <small>Based on CaloriesNinja data for 100g serving.</small>
+    `;
 
-        <div class="nutrient"><span>Total Fat</span><span>${food.fat_total_g.toFixed(1)} g <span class="dv">${dv.fat.toFixed(0)}%</span></span></div>
-        <div class="nutrient"><span>Cholesterol</span><span>${food.cholesterol_mg.toFixed(0)} mg <span class="dv">${dv.cholesterol.toFixed(0)}%</span></span></div>
-        <div class="nutrient"><span>Sodium</span><span>${food.sodium_mg.toFixed(0)} mg <span class="dv">${dv.sodium.toFixed(0)}%</span></span></div>
-        <div class="nutrient"><span>Total Carbohydrates</span><span>${food.carbohydrates_total_g.toFixed(1)} g <span class="dv">${dv.carbs.toFixed(0)}%</span></span></div>
-        <div class="nutrient"><span>Dietary Fiber</span><span>${food.fiber_g.toFixed(1)} g <span class="dv">${dv.fiber.toFixed(0)}%</span></span></div>
-        <div class="nutrient"><span>Total Sugars</span><span>${food.sugar_g.toFixed(1)} g</span></div>
-        <div class="nutrient"><span>Protein</span><span>${food.protein_g.toFixed(1)} g <span class="dv">${dv.protein.toFixed(0)}%</span></span></div>
+  } catch (error) {
+    document.getElementById("result").innerHTML =
+      "Error fetching data. Please try again.";
+  }
+}
+</script>
 
-        <div style="font-size:0.75rem; opacity:0.7; margin-top:10px; text-align:center;">
-          *Serving size: ${food.serving_size_g || 100} g<br>
-          *Percent Daily Values (%DV) are based on a 2,000 calorie diet.
-        </div>
-      `;
-    }
-
-    let typingTimer;
-    searchInput.addEventListener("input", () => {
-      clearTimeout(typingTimer);
-      const query = searchInput.value.trim();
-      if (query.length > 2) {
-        typingTimer = setTimeout(() => fetchNutrition(query), 600);
-      }
-    });
-  </script>
 </body>
 </html>
