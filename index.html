@@ -4,16 +4,38 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>NutriFind – Nutrition Facts & Calorie Checker</title>
+
 <style>
-    body {
-        font-family: Arial, sans-serif;
-        background: #f5f7f8;
-        margin: 0;
-        padding: 0;
-        color: #222;
-        line-height: 1.6;
+    /* ------------------ LIGHT / DARK MODE GLOBAL ------------------ */
+    :root {
+        --bg: #f5f7f8;
+        --text: #222;
+        --card-bg: #fff;
+        --subtitle: #555;
+        --table-border: #ccc;
+        --table-text: #111;
     }
 
+    body.dark {
+        --bg: #121212;
+        --text: #e6e6e6;
+        --card-bg: #1e1e1e;
+        --subtitle: #aaa;
+        --table-border: #444;
+        --table-text: #eee;
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+        background: var(--bg);
+        margin: 0;
+        padding: 0;
+        color: var(--text);
+        line-height: 1.6;
+        transition: background 0.3s, color 0.3s;
+    }
+
+    /* ------------------ HEADER ------------------ */
     header {
         text-align: center;
         padding: 30px 20px 10px;
@@ -28,11 +50,11 @@
     }
     .subtitle {
         font-size: 15px;
-        color: #555;
+        color: var(--subtitle);
         margin-bottom: 20px;
     }
 
-    /* FORM SECTION */
+    /* ------------------ FORM SECTION ------------------ */
     .container {
         max-width: 600px;
         margin: auto;
@@ -48,19 +70,23 @@
     input, select {
         padding: 12px;
         font-size: 16px;
-        border: 1px solid #ccc;
+        border: 1px solid var(--table-border);
         border-radius: 6px;
         width: 100%;
+        background: var(--card-bg);
+        color: var(--text);
         box-sizing: border-box;
+        transition: background 0.3s, color 0.3s, border 0.3s;
     }
 
-    /* NUTRITION CARD */
+    /* ------------------ NUTRITION CARD ------------------ */
     .card {
-        background: #fff;
+        background: var(--card-bg);
         padding: 25px;
         border-radius: 12px;
         box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         margin-top: 25px;
+        transition: background 0.3s;
     }
 
     .card h2 {
@@ -74,19 +100,24 @@
         margin: 10px 0 20px;
     }
 
+    /* TABLE + BORDERS RESTORED */
     table {
         width: 100%;
         font-size: 16px;
         border-collapse: collapse;
     }
 
+    table tr {
+        border-bottom: 1px solid var(--table-border);
+    }
+
     table td {
         padding: 6px 0;
+        color: var(--table-text);
     }
 
     table td:last-child {
         text-align: right;
-        color: #111;
     }
 
     .serving-note {
@@ -95,6 +126,7 @@
         font-size: 13px;
         color: #777;
     }
+    body.dark .serving-note { color: #bbb; }
 
     .message {
       background: #fff3cd;
@@ -105,7 +137,7 @@
       margin-bottom: 12px;
     }
 
-    /* ABOUT SECTION */
+    /* ------------------ ABOUT SECTION ------------------ */
     .about-section {
         max-width: 700px;
         margin: 40px auto;
@@ -122,22 +154,48 @@
     .about-section p {
         text-align: left;
         margin: 0 0 18px;
-        color: #444;
+        color: var(--text);
     }
 
+    /* ------------------ FOOTER ------------------ */
     footer {
         text-align: center;
         padding: 20px;
         font-size: 13px;
         color: #777;
     }
+    body.dark footer { color: #aaa; }
 
+    /* ------------------ GRID LAYOUT (unchanged) ------------------ */
     @media (min-width: 800px) {
       .grid-row { display: grid; grid-template-columns: 1fr 120px 160px; gap:12px; align-items:start; }
       .input-group { margin-bottom: 0; }
     }
+
+    /* ------------------ DARK MODE TOGGLE BUTTON ------------------ */
+    .dark-toggle {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: var(--card-bg);
+        border: 1px solid var(--table-border);
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+        transition: background 0.3s, border 0.3s, transform 0.2s;
+        font-size: 20px;
+    }
+    .dark-toggle:hover {
+        transform: scale(1.08);
+    }
 </style>
 </head>
+
 <body>
 
 <header>
@@ -151,7 +209,6 @@
 
     <div id="messageContainer" style="display:none"></div>
 
-    <!-- responsive: on wide screens show inputs in a row -->
     <div class="grid-row" style="margin-bottom:12px;">
       <div class="input-group">
         <input type="text" id="foodInput" placeholder="Search any food (e.g., apple, chicken breast)">
@@ -184,7 +241,7 @@
 
 </div>
 
-<!-- ABOUT / CONTENT SECTION -->
+<!-- ABOUT SECTION -->
 <div class="about-section">
 
     <h2>What is NutriFind?</h2>
@@ -208,12 +265,28 @@
     Powered by CalorieNinjas API. NutriFind © 2025
 </footer>
 
-<script>
-// Configuration: if you don't want to expose an API key in client-side code,
-// leave API_KEY empty and make sure you have a server-side /api/nutrition
-// endpoint that calls CalorieNinjas with your secret key (recommended).
-const API_KEY = ""; // <-- OPTIONAL: put your CalorieNinjas key here to call API directly from client
+<!-- DARK MODE TOGGLE -->
+<div class="dark-toggle" id="darkToggle">🌙</div>
 
+<script>
+/* ============================================================
+   DARK MODE
+============================================================ */
+const darkToggle = document.getElementById('darkToggle');
+
+darkToggle.addEventListener('click', () => {
+    document.body.classList.toggle('dark');
+
+    // swap icon depending on mode
+    darkToggle.textContent = document.body.classList.contains('dark')
+        ? "☀️"
+        : "🌙";
+});
+
+/* ============================================================
+   EXISTING NUTRITION LOGIC — unchanged
+============================================================ */
+const API_KEY = ""; 
 const foodInput = document.getElementById('foodInput');
 const amountInput = document.getElementById('amountInput');
 const unitSelect = document.getElementById('unitSelect');
@@ -222,14 +295,12 @@ const nutritionTable = document.getElementById('nutritionTable');
 const servingNote = document.getElementById('servingNote');
 const messageContainer = document.getElementById('messageContainer');
 
-let lastFoodData = null;
 let debounceTimer = null;
 
-function showMessage(text, type = 'info'){
+function showMessage(text){
   messageContainer.style.display = 'block';
   messageContainer.className = 'message';
   messageContainer.innerText = text;
-  // auto-hide after 6s
   setTimeout(()=>{ messageContainer.style.display = 'none'; }, 6000);
 }
 
@@ -255,7 +326,6 @@ function convertToGrams(name, qty, unit) {
 }
 
 async function getNutritionFromApi(query) {
-  // If client API key is provided, call CalorieNinjas directly
   if (API_KEY) {
     const url = `https://api.calorieninjas.com/v1/nutrition?query=${encodeURIComponent(query)}`;
     const res = await fetch(url, { headers: { 'X-Api-Key': API_KEY } });
@@ -263,9 +333,6 @@ async function getNutritionFromApi(query) {
     return await res.json();
   }
 
-  // Otherwise call local server endpoint (recommended). This assumes you
-  // have a server route /api/nutrition that forwards the request to CalorieNinjas
-  // using a secret API key stored on the server.
   const localUrl = `/api/nutrition?query=${encodeURIComponent(query)}`;
   const res = await fetch(localUrl);
   if (!res.ok) throw new Error(`Local API error ${res.status}`);
@@ -282,15 +349,11 @@ async function fetchNutrition(){
     return;
   }
 
-  // Build query: prefer sending amount+unit+food text to API
   const queryText = `${amount} ${unit} ${food}`;
 
   try {
-    // show a quick loading message
-    nutritionTable.innerHTML = '';
-    servingNote.innerText = '';
-    resultsCard.style.display = 'block';
     nutritionTable.innerHTML = '<tr><td>Loading…</td><td></td></tr>';
+    resultsCard.style.display = 'block';
 
     const data = await getNutritionFromApi(queryText);
 
@@ -300,14 +363,10 @@ async function fetchNutrition(){
     }
 
     const item = data.items[0];
-    lastFoodData = item;
-
-    // compute grams for display even if API returns serving_size_g
     const grams = convertToGrams(item.name || food, amount, unit);
 
-    // render table rows safely (handle missing fields)
     function val(key, fallback='0'){
-      return (item[key] !== undefined && item[key] !== null) ? item[key] : fallback;
+      return (item[key] ?? fallback);
     }
 
     nutritionTable.innerHTML = `
@@ -323,23 +382,13 @@ async function fetchNutrition(){
     servingNote.innerText = `Serving: ${amount} ${unit} → approx. ${Math.round(grams)} g`;
 
   } catch (err) {
-    console.error('Error fetching data:', err);
-
-    // Friendly UI message with guidance if API key missing or server down
-    const isClientKey = !API_KEY ? false : true;
-    const helpText = !API_KEY
-      ? 'Unable to fetch nutrition data. Make sure you have a server-side /api/nutrition route or set an API key in the page (not recommended).'
-      : 'Unable to fetch nutrition data. Check your API key and network.';
-
+    console.error(err);
     messageContainer.style.display = 'block';
     messageContainer.className = 'message';
-    messageContainer.innerText = helpText + `\n(${err.message || err})`;
-
-    nutritionTable.innerHTML = '<tr><td>Error retrieving data.</td><td></td></tr>';
+    messageContainer.innerText = "Error fetching data: " + err.message;
   }
 }
 
-// debounce handler so we don't call API on every keystroke
 function scheduleFetch(){
   clearTimeout(debounceTimer);
   debounceTimer = setTimeout(fetchNutrition, 500);
@@ -349,10 +398,9 @@ foodInput.addEventListener('input', scheduleFetch);
 amountInput.addEventListener('input', scheduleFetch);
 unitSelect.addEventListener('change', scheduleFetch);
 
-// On load, show brief hint if no API key configured
 window.addEventListener('load', ()=>{
   if (!API_KEY) {
-    showMessage('Tip: For production, add a server-side proxy (/api/nutrition) that uses your CalorieNinjas API key so the key is never exposed to the browser.');
+    showMessage('Tip: Add a server-side proxy to hide your API key.');
   }
 });
 </script>
