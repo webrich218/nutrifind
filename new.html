@@ -248,61 +248,36 @@
                 localStorage.setItem('theme', 'dark');
                 themeToggle.textContent = '🌙';
             }
-            // If the chart exists, redraw it to pick up new colors
-            if (macroChartInstance) {
-                // Re-calculate to re-run the chart update with new colors
-                const totals = macroChartInstance.data.datasets[0].data.reduce((acc, val, index) => {
-                    // This is a simplification and assumes data order is Fat, Carb, Protein
-                    const keys = ['fat', 'carb', 'protein'];
-                    acc[keys[index]] = val;
-                    return acc;
-                }, { cal: 0, fat: 0, carb: 0, protein: 0, sodium: 0, fiber: 0, sugar: 0 });
-                // We'd need to store the full totals object to truly redraw, but for theme fix, we just need to re-init.
-                // Since the chart is already tied to the canvas, we can just call updateMacroChart with mock totals 
-                // to force a redraw with the current theme colors if a real totals object was stored.
-                // For simplicity here, we'll rely on the user clicking 'Calculate' again, or we can refresh the chart if it exists.
-                // The main fix is in updateMacroChart, which will use the computed style.
-            }
         }
         // --- END THEME TOGGLE LOGIC ---
 
 
         // Set up the initial ingredient row and theme on load
         document.addEventListener('DOMContentLoaded', () => {
-            addIngredient('2', 'tbsp', 'olive oil');
-            addIngredient('300', 'g', 'chicken breast');
-            addIngredient('1', 'cup', 'cooked rice');
+            addIngredient();
             initializeTheme();
         });
 
-        function ingredientRowHTML(food = '', amount = '', unit = 'g') {
+        function ingredientRowHTML() {
             return `
             <div class="ingredient-row flex gap-2 mb-2">
-                <input type="text" class="food w-full p-2 border border-gray-300 rounded-lg text-sm" placeholder="e.g., Chicken breast" value="${food}" />
-                <input type="number" class="amount p-2 border border-gray-300 rounded-lg w-20 text-sm" placeholder="Amount" value="${amount}" min="0.1" />
+                <input type="text" class="food w-full p-2 border border-gray-300 rounded-lg text-sm" placeholder="e.g., Chicken breast" />
+                <input type="number" class="amount p-2 border border-gray-300 rounded-lg w-20 text-sm" placeholder="Amount" value="100" min="0.1" />
                 <select class="unit p-2 border border-gray-300 rounded-lg text-sm w-20">
-                    <option value="g" ${unit === 'g' ? 'selected' : ''}>g</option>
-                    <option value="mg" ${unit === 'mg' ? 'selected' : ''}>mg</option>
-                    <option value="oz" ${unit === 'oz' ? 'selected' : ''}>oz</option>
-                    <option value="cup" ${unit === 'cup' ? 'selected' : ''}>cup</option>
-                    <option value="tbsp" ${unit === 'tbsp' ? 'selected' : ''}>tbsp</option>
-                    <option value="tsp" ${unit === 'tsp' ? 'selected' : ''}>tsp</option>
-                    <option value="piece" ${unit === 'piece' ? 'selected' : ''}>pc</option>
+                    <option value="g">g</option>
+                    <option value="mg">mg</option>
+                    <option value="oz">oz</option>
+                    <option value="cup">cup</option>
+                    <option value="tbsp">tbsp</option>
+                    <option value="tsp">tsp</option>
+                    <option value="piece">pc</option>
                 </select>
                 <button class="bg-red-500 text-white rounded-lg p-2 text-sm hover:bg-red-600 w-10 flex-shrink-0" onclick="this.parentElement.remove()">✕</button>
             </div>`;
         }
 
-        function addIngredient(amount = '', unit = 'g', food = '') {
-            document.getElementById('ingredientsContainer').insertAdjacentHTML('beforeend', ingredientRowHTML(food, amount, unit));
-        }
-
-        // Helper function to reliably get the current computed text color
-        function getCurrentTextColor() {
-            // Get the computed value of the CSS variable from the body element
-            const color = window.getComputedStyle(document.body).getPropertyValue('--text-color').trim();
-            // Fallback for unexpected results, though usually unnecessary
-            return color || '#222';
+        function addIngredient() {
+            document.getElementById('ingredientsContainer').insertAdjacentHTML('beforeend', ingredientRowHTML());
         }
 
         // --- API CALL ---
@@ -313,55 +288,16 @@
             
             while (currentRetry < maxRetries) {
                 try {
-                    // CalorieNinja API Endpoint
-                    const apiKey = "";
-                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
-
-                    const systemPrompt = "You are a professional nutrition data extraction tool. Based on the user's recipe query, use Google Search to find and return the raw JSON from the CalorieNinja nutrition API for that query. Only return the raw JSON and nothing else. If the query cannot be fulfilled, return an empty array [] in JSON format.";
-                    const userQuery = `Find the CalorieNinja nutrition API result for the query: ${query}`;
-                    
-                    const payload = {
-                        contents: [{ parts: [{ text: userQuery }] }],
-                        tools: [{ "google_search": {} }],
-                        systemInstruction: {
-                            parts: [{ text: systemPrompt }]
-                        },
-                    };
-                    
-                    const response = await fetch(apiUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-                    
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
+                    // Call the secure Vercel proxy endpoint
+                    const res = await fetch(`/api/nutrition?query=${encodeURIComponent(query)}`);
+                    if (!res.ok) {
+                        throw new Error(`HTTP error! status: ${res.status}`);
                     }
-                    
-                    const result = await response.json();
-                    
-                    // Attempt to parse the text part which should contain the CalorieNinja JSON
-                    let textResult = result.candidates?.[0]?.content?.parts?.[0]?.text;
-                    
-                    if (textResult) {
-                        // Strip markdown fences if present
-                        textResult = textResult.replace(/```json\n|```/g, '').trim();
-                        try {
-                            const data = JSON.parse(textResult);
-                            // Assuming the CalorieNinja structure is { items: [...] } or just [...]
-                            return Array.isArray(data) ? { items: data } : data;
-                        } catch (e) {
-                            console.warn("Could not parse JSON from LLM response:", textResult);
-                            return { items: [] };
-                        }
-                    }
-
-                    return { items: [] };
-
+                    return await res.json();
                 } catch (error) {
                     currentRetry++;
                     if (currentRetry >= maxRetries) {
-                        console.error("Error fetching nutrition data after retries:", error);
+                        console.error("Error fetching nutrition data from API proxy after retries:", error);
                         return { items: [] }; // Return empty data on final failure
                     }
                     // Wait with exponential backoff before retrying
@@ -387,11 +323,10 @@
 
             for (const row of rows) {
                 const food = row.querySelector('.food').value.trim();
-                const amtInput = row.querySelector('.amount');
-                const amt = amtInput.value;
+                const amt = row.querySelector('.amount').value;
                 const unit = row.querySelector('.unit').value;
                 
-                if (!food || parseFloat(amt) <= 0 || isNaN(parseFloat(amt))) continue;
+                if (!food || amt <= 0) continue;
                 
                 // CalorieNinja handles the quantity and unit in the query string
                 const query = `${amt}${unit} ${food}`;
@@ -404,16 +339,13 @@
                     totals.fat += item.fat_total_g || 0;
                     totals.carb += item.carbohydrates_total_g || 0;
                     totals.protein += item.protein_g || 0;
-                    // API fields for micronutrients
+                    // Assuming CalorieNinja API returns these fields (common for full nutrition APIs)
                     totals.sodium += item.sodium_mg || 0;
                     totals.fiber += item.fiber_g || 0;
                     totals.sugar += item.sugar_g || 0; 
                     successfulLookups++;
                 } else {
-                    // Highlight the failed row if the lookup was attempted but failed
-                    row.style.border = '2px solid red';
-                    setTimeout(() => row.style.border = 'none', 3000);
-                    console.warn(`Could not find nutrition data for: ${query}. Please try rephrasing.`);
+                    console.warn(`Could not find nutrition data for: ${query}`);
                 }
             }
             
@@ -422,7 +354,8 @@
             
             if (successfulLookups === 0) {
                 document.getElementById('resultsCard').style.display = 'none';
-                console.error("No ingredients were successfully analyzed. Please check your spelling and ensure all ingredients have an amount specified.");
+                // Using a console error, as per instructions to avoid alerts.
+                console.error("No ingredients were successfully analyzed. Please check your spelling.");
                 return;
             }
 
@@ -436,7 +369,7 @@
             const tableBody = document.getElementById('nutritionTable');
 
             // Helper to format values
-            const formatG = (val) => `${val > 0.1 ? val.toFixed(1) : '<0.1'} g`;
+            const formatG = (val) => `${val.toFixed(1)} g`;
             const formatMG = (val) => `${Math.round(val)} mg`;
             const formatCal = (val) => `${Math.round(val)}`;
 
@@ -476,9 +409,6 @@
 
             const macroData = [totals.fat, totals.carb, totals.protein];
             const totalMacros = totals.fat + totals.carb + totals.protein;
-            
-            // Get the CURRENT computed text color for Chart.js
-            const textColor = getCurrentTextColor(); 
 
             // Pastel Colors
             const pastelColors = ["#FFC3A0", "#C6E2FF", "#D7FFC6"]; 
@@ -492,7 +422,7 @@
                         backgroundColor: pastelColors,
                         hoverOffset: 15,
                         borderWidth: 2,
-                        borderColor: textColor, // Use computed color for border
+                        borderColor: 'var(--card-bg)', // Use card-bg variable for border
                     }]
                 },
                 options: {
@@ -501,7 +431,7 @@
                         legend: {
                             position: 'bottom',
                             labels: {
-                                color: textColor, // FIX: Use computed color for text
+                                color: 'var(--text-color)', // Use text-color variable
                                 // Add percentage to legend labels
                                 generateLabels: (chart) => {
                                     const data = chart.data;
@@ -512,7 +442,7 @@
                                             return {
                                                 text: `${label}: ${value.toFixed(1)}g (${percentage}%)`, // Display name, value, and percentage
                                                 fillStyle: data.datasets[0].backgroundColor[i],
-                                                strokeStyle: textColor,
+                                                strokeStyle: data.datasets[0].borderColor,
                                                 lineWidth: data.datasets[0].borderWidth,
                                                 hidden: isNaN(value),
                                                 index: i
@@ -526,7 +456,7 @@
                         title: {
                             display: true,
                             text: 'Macronutrient Split (by weight in grams)',
-                            color: textColor, // FIX: Use computed color for title
+                            color: 'var(--text-color)', // Use text-color variable
                             font: { size: 14, weight: 'bold' }
                         },
                         tooltip: {
