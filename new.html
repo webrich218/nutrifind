@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NutriFind – Recipe Nutrition Calculator</title>
+<style>
+ body { font-family: Arial, sans-serif; background:#f5f7f8; margin:0; padding:0; color:#222; }
+ header { text-align:center; padding:25px 15px 10px; }
+ header img { width:50px; }
+ .container { max-width:750px; margin:auto; padding:10px 20px 40px; }
+ .ingredient-row { display:flex; gap:10px; margin-bottom:8px; }
+ input, select { padding:10px; border:1px solid #ccc; border-radius:6px; }
+ .add-btn, .calc-btn, .copy-btn { background:#0a7c36; color:#fff; border:none; padding:10px 14px; border-radius:6px; cursor:pointer; margin-top:10px; }
+ table { width:100%; border-collapse:collapse; margin-top:25px; }
+ table td { padding:6px 0; border-bottom:1px solid #ccc; }
+ table td:last-child { text-align:right; }
+ .share-buttons { margin-top:18px; display:flex; gap:10px; }
+ .copy-btn { background:#222; }
+ footer { text-align:center; padding:20px; font-size:13px; color:#777; }
+</style>
+</head>
+<body>
+<header>
+ <img src="/favicon.png" alt="logo">
+ <h1>NutriFind Recipe Calculator</h1>
+</header>
+<div class="container">
+ <div id="ingredientsContainer"></div>
+ <button class="add-btn" onclick="addIngredient()">+ Add Ingredient</button>
+ <button class="calc-btn" onclick="calculateRecipe()">Calculate Nutrition</button>
+
+ <div id="resultsCard" style="display:none;">
+   <table id="nutritionTable"></table>
+   <div class="share-buttons">
+      <button class="copy-btn" onclick="copyTable()">Copy</button>
+      <button class="copy-btn" onclick="shareTable()">Share</button>
+   </div>
+ </div>
+</div>
+<footer>NutriFind © 2025</footer>
+<script>
+// API key is stored securely in Vercel env — handled via /api/nutrition serverless function
+// kept for compatibility but unused on client
+const API_KEY = "env";
+function ingredientRowHTML(){
+ return `
+  <div class="ingredient-row">
+    <input type="text" class="food" placeholder="Ingredient" />
+    <input type="number" class="amount" placeholder="Amount" value="100" />
+    <select class="unit">
+      <option value="g">g</option>
+      <option value="cup">cup</option>
+      <option value="tbsp">tbsp</option>
+      <option value="tsp">tsp</option>
+      <option value="piece">piece</option>
+    </select>
+    <button onclick="this.parentElement.remove()">✕</button>
+  </div>`;
+}
+function addIngredient(){
+ document.getElementById('ingredientsContainer').insertAdjacentHTML('beforeend', ingredientRowHTML());
+}
+addIngredient();
+async function getNutrition(query){
+ const localUrl = `/api/nutrition?query=${encodeURIComponent(query)}`;
+ const res = await fetch(localUrl);
+ return await res.json();
+}
+async function calculateRecipe(){
+ const rows = document.querySelectorAll('.ingredient-row');
+ let totals = {cal:0, fat:0, carb:0, protein:0};
+ for(const row of rows){
+  const food = row.querySelector('.food').value.trim();
+  const amt = row.querySelector('.amount').value;
+  const unit = row.querySelector('.unit').value;
+  if(!food) continue;
+  const query = `${amt}${unit} ${food}`;
+  const data = await getNutrition(query);
+  if(!data.items || !data.items.length) continue;
+  const item = data.items[0];
+  totals.cal += item.calories || 0;
+  totals.fat += item.fat_total_g || 0;
+  totals.carb += item.carbohydrates_total_g || 0;
+  totals.protein += item.protein_g || 0;
+ }
+ document.getElementById('resultsCard').style.display='block';
+ document.getElementById('nutritionTable').innerHTML=`
+  <tr><td><strong>Total Calories</strong></td><td><strong>${Math.round(totals.cal)}</strong></td></tr>
+  <tr><td>Fat</td><td>${totals.fat.toFixed(1)} g</td></tr>
+  <tr><td>Carbs</td><td>${totals.carb.toFixed(1)} g</td></tr>
+  <tr><td>Protein</td><td>${totals.protein.toFixed(1)} g</td></tr>`;
+}
+function copyTable(){
+ const text=document.getElementById("nutritionTable").innerText;
+ navigator.clipboard.writeText(text);
+ alert("Copied to clipboard!");
+}
+async function shareTable(){
+ const text=document.getElementById("nutritionTable").innerText;
+ if(navigator.share){ await navigator.share({text}); }
+ else{ alert("Sharing not supported on this browser."); }
+}
+</script>
+</body>
+</html>
