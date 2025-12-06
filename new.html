@@ -8,7 +8,7 @@
     
     <title>NutriFind: Accurate Recipe Nutrition Calculator | Calorie and Macro Counter</title>
     <meta name="description" content="Calculate detailed nutrition facts (calories, fat, carbs, protein, fiber, sugar, sodium, saturated fat) for any recipe ingredient list using natural language processing. Includes a kitchen unit conversion tool." />
-    <meta name="author" content="[NutriFind]" />
+    <meta name="author" content="[Your Name or Company Name]" />
     <meta property="og:title" content="NutriFind: Accurate Recipe Nutrition Calculator" />
     <meta property="og:description" content="Calculate detailed nutrition facts for any recipe. Includes macro tracking and a kitchen unit conversion tool." />
     <meta property="og:type" content="website" />
@@ -307,7 +307,7 @@
     
     <script>
         
-        // --- GLOBAL CONFIG (REVISED) ---
+        // --- GLOBAL CONFIG ---
         const WEBSITE_URL = "https://nutrifind.fit/"; 
         const WEBSITE_TITLE = "NutriFind Recipe Calculator";
 
@@ -646,7 +646,7 @@
             resultDisplay.textContent = `${amount.toFixed(2)} ${fromUnitLabel} = ${result.toFixed(2)} ${toUnitLabel}`;
         }
         
-        // --- COPY & SHARE UTILITIES (UPDATED) ---
+        // --- COPY & SHARE UTILITIES (Revised CopyTable only for URL/Title) ---
         function copyIngredients() {
             const rows = document.querySelectorAll('.ingredient-row');
             let ingredientsList = [];
@@ -701,16 +701,32 @@
             } catch (err) { console.error('Could not copy text: ', err); }
         }
 
+        // --- UTILITY: Share Table (REVISED to use simplified format) ---
         async function shareTable() { 
-            const tableText = document.getElementById("nutritionTable").innerText;
-            // Body of the message encourages users to check out the site
-            const shareBody = `Check out your calories and macros too! Here are my recipe facts:\n---\n${tableText}\n---\nCalculate your own recipes instantly. Visit ${WEBSITE_URL}`;
+            if (!window.lastCalculatedTotals) {
+                alert("Please calculate the recipe nutrition before sharing.");
+                return;
+            }
+            
+            const t = window.lastCalculatedTotals;
+            
+            // Generate the clean, templated text using the required format
+            const shareBody = `Check out my recipe nutrition facts from ${WEBSITE_TITLE}:\n\n` +
+                              `Calories - ${Math.round(t.cal)}\n` +
+                              `Total Fat - ${t.fat.toFixed(1)} g\n` +
+                              `Saturated Fat - ${t.sat_fat.toFixed(1)} g\n` +
+                              `Sodium - ${Math.round(t.sodium)} mg\n` +
+                              `Total Carbohydrate - ${t.carb.toFixed(1)} g\n` +
+                              `Dietary Fiber - ${t.fiber.toFixed(1)} g\n` +
+                              `Total Sugars - ${t.sugar.toFixed(1)} g\n` +
+                              `Protein - ${t.protein.toFixed(1)} g\n\n` +
+                              `Calculate your own instantly. Visit ${WEBSITE_URL}`;
 
             if (navigator.share) { 
                 await navigator.share({ 
                     title: `${WEBSITE_TITLE} Results`, 
                     text: shareBody,
-                    url: WEBSITE_URL 
+                    url: WEBSITE_URL // This makes nutrifind.fit a clickable rich link preview
                 }); 
             } else { 
                 alert(`Sharing not supported. Please use the 'Copy Nutrition Table' button or visit ${WEBSITE_URL}`); 
