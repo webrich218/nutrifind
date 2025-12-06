@@ -705,7 +705,7 @@
             } catch (err) { console.error('Could not copy text: ', err); }
         }
 
-        // --- UTILITY: Share Table (FINAL STABLE: TEXT-ONLY, LINK MENTIONED ONCE) ---
+        // --- UTILITY: Share Table (FINAL STABLE: TEXT-ONLY, NO LINK IN MESSAGE BODY) ---
         async function shareTable() { 
             if (!window.lastCalculatedTotals) {
                 alert("Please calculate the recipe nutrition before sharing.");
@@ -714,9 +714,8 @@
             
             const t = window.lastCalculatedTotals;
             
-            // 1. Generate the clean, templated text. The link is mentioned once at the end of the first line.
-            const shareBody = `Check out my recipe nutrition facts from ${WEBSITE_TITLE}. Get your own results here: ${WEBSITE_URL}\n\n` +
-                              // The detailed data follows immediately after a double line break
+            // 1. Generate the clean, templated text. The link is NOT included here.
+            const shareBody = `Check out my recipe nutrition facts from ${WEBSITE_TITLE}.\n\n` +
                               `*Calories - ${Math.round(t.cal)}*\n` +
                               `Total Fat - ${t.fat.toFixed(1)} g\n` +
                               `Saturated Fat - ${t.sat_fat.toFixed(1)} g\n` +
@@ -731,7 +730,8 @@
                     await navigator.share({ 
                         title: `${WEBSITE_TITLE} Results`, 
                         text: shareBody,
-                        url: WEBSITE_URL // Included here to trigger a rich preview if the platform supports it
+                        // The URL is only included here to trigger a rich link preview
+                        url: WEBSITE_URL 
                     });
                 } catch (error) {
                     console.error('Sharing failed or cancelled:', error);
