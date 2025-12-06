@@ -8,7 +8,7 @@
     
     <title>NutriFind: Accurate Recipe Nutrition Calculator | Calorie and Macro Counter</title>
     <meta name="description" content="Calculate detailed nutrition facts (calories, fat, carbs, protein, fiber, sugar, sodium, saturated fat) for any recipe ingredient list using natural language processing. Includes a kitchen unit conversion tool." />
-    <meta name="author" content="[Nutrifind]" />
+    <meta name="author" content="NutriFind" />
     <meta property="og:title" content="NutriFind: Accurate Recipe Nutrition Calculator" />
     <meta property="og:description" content="Calculate detailed nutrition facts for any recipe. Includes macro tracking and a kitchen unit conversion tool." />
     <meta property="og:type" content="website" />
@@ -157,6 +157,7 @@
     </header>
     
     <div class="container p-4 w-full max-w-2xl">
+        
         <div class="bg-white p-6 rounded-xl shadow-lg mb-6 border border-gray-100">
             <h2 class="text-xl font-semibold mb-4 text-gray-700">Recipe Ingredients</h2>
             
@@ -301,10 +302,11 @@
             </div>
 
         </div>
-        <button id="themeToggle" class="theme-toggle-btn mt-auto" aria-label="Toggle dark mode" onclick="toggleTheme()">
-    </button>
+    
+    <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle dark mode" onclick="toggleTheme()">
+        </button>
 
-    <footer class="bg-white p-4 w-full text-center text-xs text-gray-500 border-t border-gray-200">
+    <footer class="sticky bottom-0 bg-white p-4 w-full text-center text-xs text-gray-500 border-t border-gray-200 mt-auto">
         NutriFind © 2025 · Data provided by CalorieNinja API.
     </footer>
 
@@ -748,3 +750,4 @@ async function shareTable() {
     </script>
 </body>
 </html>
+
