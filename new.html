@@ -705,7 +705,7 @@
             } catch (err) { console.error('Could not copy text: ', err); }
         }
 
-        // --- UTILITY: Share Table (FINAL IMPLEMENTATION: TEXT-ONLY FOR GUARANTEED LINK & DATA) ---
+        // --- UTILITY: Share Table (FINAL FINAL IMPLEMENTATION: TEXT-ONLY FOR GUARANTEED LINK & DATA) ---
         async function shareTable() { 
             if (!window.lastCalculatedTotals) {
                 alert("Please calculate the recipe nutrition before sharing.");
@@ -715,9 +715,10 @@
             const t = window.lastCalculatedTotals;
             
             // 1. Generate the clean, templated text matching your screenshot.
-            // Explicitly include the WEBSITE_URL to ensure it becomes a clickable link.
-            const shareBody = `Check out my recipe nutrition facts from nutrifind.fit:\n${WEBSITE_URL}\n\n` +
-                              `Calories - ${Math.round(t.cal)}\n` +
+            // Ensure the link is on the first line, followed by a double line break, then the data.
+            const shareBody = `Check out my recipe nutrition facts from ${WEBSITE_TITLE}: ${WEBSITE_URL}\n\n` +
+                              // Note: Using an asterisk for bolding (if supported by the messaging app)
+                              `*Calories - ${Math.round(t.cal)}*\n` +
                               `Total Fat - ${t.fat.toFixed(1)} g\n` +
                               `Saturated Fat - ${t.sat_fat.toFixed(1)} g\n` +
                               `Sodium - ${Math.round(t.sodium)} mg\n` +
@@ -727,11 +728,16 @@
                               `Protein - ${t.protein.toFixed(1)} g`;
 
             if (navigator.share) { 
-                await navigator.share({ 
-                    title: `${WEBSITE_TITLE} Results`, 
-                    text: shareBody,
-                    url: WEBSITE_URL // Included for rich link preview attempts by messaging apps
-                }); 
+                try {
+                    await navigator.share({ 
+                        title: `${WEBSITE_TITLE} Results`, 
+                        text: shareBody,
+                        url: WEBSITE_URL 
+                    });
+                } catch (error) {
+                    console.error('Sharing failed:', error);
+                    alert('Sharing failed. Try copying the nutrition table instead.');
+                }
             } else { 
                 alert(`Sharing not supported. Please use the 'Copy Nutrition Table' button or visit ${WEBSITE_URL}`); 
             }
