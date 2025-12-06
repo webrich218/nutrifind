@@ -13,7 +13,8 @@
     <meta property="og:title" content="NutriFind: Accurate Recipe Nutrition Calculator" />
     <meta property="og:description" content="Calculate detailed nutrition facts (calories, fat, carbs, protein, fiber, sugar, sodium) for any recipe ingredient list using natural language processing." />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="/" /> <meta property="og:image" content="https://placehold.co/1200x630/0a7c36/ffffff?text=NutriFind+Calculator" />
+    <meta property="og:url" content="/" />
+    <meta property="og:image" content="https://placehold.co/1200x630/0a7c36/ffffff?text=NutriFind+Calculator" />
     
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2553227651137870"
         crossorigin="anonymous"></script>
@@ -36,9 +37,9 @@
         
         .dark {
             /* Dark Theme Overrides */
-            --background: #1f2937; /* Dark blue/gray */
-            --text-color: #f3f4f6; /* Near white */
-            --card-bg: #374151; /* Darker gray */
+            --background: #1f2937;
+            --text-color: #f3f4f6;
+            --card-bg: #374151;
             --border-color: #4b5563;
             --accent: #f3f4f6;
         }
@@ -102,11 +103,14 @@
         /* Custom Styles for Buttons */
         .copy-btn { background-color: var(--accent); }
         .copy-btn:hover { background-color: #555; }
-        .calc-btn, .share-btn, .add-btn { 
+        /* Style the new button with the same primary color */
+        .calc-btn, .share-btn, .add-btn, .copy-ingredients-btn { 
             background-color: var(--primary); 
-            color: white; /* Ensure text is white for primary button contrast */
+            color: white; 
         }
-        .calc-btn:hover, .share-btn:hover, .add-btn:hover { background-color: #08662a; }
+        .calc-btn:hover, .share-btn:hover, .add-btn:hover, .copy-ingredients-btn:hover { 
+            background-color: #08662a; 
+        }
 
         /* --- Theme Toggle Button --- */
         .theme-toggle-btn {
@@ -155,6 +159,9 @@
             
             <div class="flex flex-wrap gap-3 mt-4">
                 <button class="add-btn flex-grow md:flex-grow-0 py-2 px-4 text-sm font-medium rounded-lg" onclick="addIngredient()">+ Add Ingredient</button>
+                
+                <button class="copy-ingredients-btn flex-grow md:flex-grow-0 py-2 px-4 text-sm font-medium rounded-lg" onclick="copyIngredients()">Copy Ingredients</button>
+                
                 <button class="calc-btn flex-grow py-2 px-4 text-lg font-bold rounded-lg" onclick="calculateRecipe()">Calculate Nutrition</button>
             </div>
         </div>
@@ -218,7 +225,7 @@
     
     <script>
         
-        // --- THEME TOGGLE LOGIC (Unchanged) ---
+        // --- THEME TOGGLE LOGIC ---
         function initializeTheme() {
             const savedTheme = localStorage.getItem('theme');
             const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -249,7 +256,7 @@
         // --- END THEME TOGGLE LOGIC ---
 
 
-        // --- INGREDIENT ROW LOGIC (Revised for single query input) ---
+        // --- INGREDIENT ROW LOGIC ---
         function ingredientRowHTML() {
             return `
             <div class="ingredient-row flex gap-2 mb-2">
@@ -274,7 +281,7 @@
             initializeTheme();
         });
 
-        // --- API CALL (Unchanged, includes retry logic) ---
+        // --- API CALL ---
         async function getNutrition(query) {
             const maxRetries = 3;
             let currentRetry = 0;
@@ -302,7 +309,7 @@
 
         let macroChartInstance = null;
 
-        // --- MAIN CALCULATION (Revised for single input and sat_fat) ---
+        // --- MAIN CALCULATION ---
         async function calculateRecipe() {
             const rows = document.querySelectorAll('.ingredient-row');
             let totals = { 
@@ -313,10 +320,10 @@
                 sodium: 0, 
                 fiber: 0, 
                 sugar: 0,
-                sat_fat: 0 // ADDED: Saturated Fat tracking
+                sat_fat: 0 
             };
             let successfulLookups = 0;
-            document.getElementById('error-message').style.display = 'none'; // Hide error initially
+            document.getElementById('error-message').style.display = 'none'; 
 
             // Simple loading indicator on the button
             const calcBtn = document.querySelector('.calc-btn');
@@ -340,7 +347,7 @@
                     // Summing up totals (using || 0 for safety)
                     totals.cal += item.calories || 0;
                     totals.fat += item.fat_total_g || 0;
-                    totals.sat_fat += item.fat_saturated_g || 0; // NEW: Capturing Saturated Fat
+                    totals.sat_fat += item.fat_saturated_g || 0; 
                     totals.carb += item.carbohydrates_total_g || 0;
                     totals.protein += item.protein_g || 0;
                     totals.sodium += item.sodium_mg || 0;
@@ -358,7 +365,7 @@
             
             if (successfulLookups === 0) {
                 document.getElementById('resultsCard').style.display = 'none';
-                document.getElementById('error-message').style.display = 'block'; // Show error message to user
+                document.getElementById('error-message').style.display = 'block'; 
                 console.error("No valid ingredients were successfully analyzed. Please check your query format (e.g., '1 cup flour').");
                 return;
             }
@@ -368,7 +375,7 @@
             updateMacroChart(totals);
         }
 
-        // --- UPDATE TABLE (Revised for sat_fat) ---
+        // --- UPDATE TABLE ---
         function updateNutritionTable(totals) {
             const tableBody = document.getElementById('nutritionTable');
 
@@ -406,7 +413,7 @@
             `;
         }
 
-        // --- UPDATE CHART (Unchanged) ---
+        // --- UPDATE CHART ---
         function updateMacroChart(totals) {
             const ctx = document.getElementById("macroChart").getContext("2d");
             if (macroChartInstance) macroChartInstance.destroy();
@@ -479,7 +486,52 @@
             });
         }
 
-        // --- UTILITIES (Unchanged) ---
+        // --- UTILITY: Copy Ingredients (New Function) ---
+        function copyIngredients() {
+            const rows = document.querySelectorAll('.ingredient-row');
+            let ingredientsList = [];
+
+            // Collect the text from all active ingredient inputs
+            rows.forEach(row => {
+                const queryInput = row.querySelector('.query');
+                const query = queryInput.value.trim();
+                if (query) {
+                    ingredientsList.push(query);
+                }
+            });
+
+            const textToCopy = ingredientsList.join('\n');
+
+            if (textToCopy.length === 0) {
+                console.warn("No ingredients entered to copy.");
+                return;
+            }
+
+            try {
+                const textarea = document.createElement('textarea');
+                textarea.value = textToCopy;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                
+                console.log("Ingredients copied to clipboard!");
+                
+                const copyBtn = document.querySelector('.copy-ingredients-btn');
+                const originalText = copyBtn.textContent;
+                copyBtn.textContent = 'Copied!';
+                setTimeout(() => {
+                    copyBtn.textContent = originalText;
+                }, 1500);
+
+            } catch (err) {
+                console.error('Could not copy ingredients: ', err);
+            }
+        }
+        // --- END UTILITY: Copy Ingredients ---
+
+
+        // --- UTILITY: Copy Table ---
         function copyTable() { 
             const tableText = "Nutrition Facts\n" + document.getElementById("nutritionTable").innerText;
             try {
@@ -495,6 +547,7 @@
             }
         }
 
+        // --- UTILITY: Share Table ---
         async function shareTable() { 
             const tableText = "Check out my recipe nutrition facts from NutriFind:\n" + document.getElementById("nutritionTable").innerText;
             if (navigator.share) { 
