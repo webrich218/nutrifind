@@ -8,7 +8,7 @@
     
     <title>NutriFind: Accurate Recipe Nutrition Calculator | Calorie and Macro Counter</title>
     <meta name="description" content="Calculate detailed nutrition facts (calories, fat, carbs, protein, fiber, sugar, sodium, saturated fat) for any recipe ingredient list using natural language processing. Includes a kitchen unit conversion tool." />
-    <meta name="author" content="[NutriFind]" />
+    <meta name="author" content="[Your Name or Company Name]" />
     <meta property="og:title" content="NutriFind: Accurate Recipe Nutrition Calculator" />
     <meta property="og:description" content="Calculate detailed nutrition facts for any recipe. Includes macro tracking and a kitchen unit conversion tool." />
     <meta property="og:type" content="website" />
@@ -378,6 +378,8 @@
             
             while (currentRetry < maxRetries) {
                 try {
+                    // NOTE: This fetch call assumes a server-side proxy exists at /api/nutrition 
+                    // that handles the actual request to an external nutrition API (e.g., CalorieNinja).
                     const res = await fetch(`/api/nutrition?query=${encodeURIComponent(query)}`);
                     if (!res.ok) {
                         throw new Error(`HTTP error! status: ${res.status}`);
@@ -703,7 +705,7 @@
             } catch (err) { console.error('Could not copy text: ', err); }
         }
 
-        // --- UTILITY: Share Table (REVERTED TO TEXT-ONLY FOR GUARANTEED LINK) ---
+        // --- UTILITY: Share Table (FINAL IMPLEMENTATION: TEXT-ONLY FOR GUARANTEED LINK & DATA) ---
         async function shareTable() { 
             if (!window.lastCalculatedTotals) {
                 alert("Please calculate the recipe nutrition before sharing.");
@@ -712,10 +714,9 @@
             
             const t = window.lastCalculatedTotals;
             
-            // 1. Generate the clean, templated text.
-            // The browser should automatically make the URL below a clickable link.
-            const shareBody = `Check out my recipe nutrition facts from ${WEBSITE_TITLE}:` +
-                              `\n${WEBSITE_URL}\n\n` +
+            // 1. Generate the clean, templated text matching your screenshot.
+            // Explicitly include the WEBSITE_URL to ensure it becomes a clickable link.
+            const shareBody = `Check out my recipe nutrition facts from nutrifind.fit:\n${WEBSITE_URL}\n\n` +
                               `Calories - ${Math.round(t.cal)}\n` +
                               `Total Fat - ${t.fat.toFixed(1)} g\n` +
                               `Saturated Fat - ${t.sat_fat.toFixed(1)} g\n` +
@@ -729,7 +730,7 @@
                 await navigator.share({ 
                     title: `${WEBSITE_TITLE} Results`, 
                     text: shareBody,
-                    url: WEBSITE_URL // Use the URL field for rich link preview metadata, just in case.
+                    url: WEBSITE_URL // Included for rich link preview attempts by messaging apps
                 }); 
             } else { 
                 alert(`Sharing not supported. Please use the 'Copy Nutrition Table' button or visit ${WEBSITE_URL}`); 
