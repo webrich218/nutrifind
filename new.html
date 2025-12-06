@@ -12,7 +12,7 @@
     <meta property="og:title" content="NutriFind: Accurate Recipe Nutrition Calculator" />
     <meta property="og:description" content="Calculate detailed nutrition facts for any recipe. Includes macro tracking and a kitchen unit conversion tool." />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="/" />
+    <meta property="og:url" content="https://nutrifind.fit/" />
     <meta property="og:image" content="https://placehold.co/1200x630/0a7c36/ffffff?text=NutriFind+Calculator" />
     
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2553227651137870"
@@ -104,12 +104,12 @@
             background-color: #08662a; 
         }
         .delete-btn {
-            background-color: #dc2626; /* Red-600 */
+            background-color: #dc2626; 
             color: white;
             transition: background-color 0.2s;
         }
         .delete-btn:hover {
-            background-color: #b91c1c; /* Red-700 */
+            background-color: #b91c1c; 
         }
         
         /* --- Theme Toggle Button --- */
@@ -307,6 +307,10 @@
     
     <script>
         
+        // --- GLOBAL CONFIG (REVISED) ---
+        const WEBSITE_URL = "https://nutrifind.fit/"; 
+        const WEBSITE_TITLE = "NutriFind Recipe Calculator";
+
         // --- GLOBAL STATE ---
         window.lastCalculatedTotals = null; 
         let macroChartInstance = null;
@@ -362,13 +366,12 @@
             }
             initializeTheme();
             convertUnit(); 
-            loadSavedRecipes(); // NEW: Load recipes on page load
+            loadSavedRecipes(); 
         });
 
-        // --- API & CALCULATION LOGIC (Unchanged from last version, except setting lastCalculatedTotals) ---
+        // --- API & CALCULATION LOGIC (Unchanged) ---
         async function getNutrition(query) {
-             // ... API logic remains here ...
-             const maxRetries = 3;
+            const maxRetries = 3;
             let currentRetry = 0;
             
             while (currentRetry < maxRetries) {
@@ -434,7 +437,6 @@
                 return;
             }
 
-            // Set the global variable for saving the recipe
             window.lastCalculatedTotals = totals; 
             
             document.getElementById('resultsCard').style.display = 'block';
@@ -462,13 +464,11 @@
         }
 
         function updateMacroChart(totals) {
-            // ... Chart.js logic remains here ...
             const ctx = document.getElementById("macroChart").getContext("2d");
             if (macroChartInstance) macroChartInstance.destroy();
 
             const macroData = [totals.fat, totals.carb, totals.protein];
             const totalMacros = totals.fat + totals.carb + totals.protein;
-
             const pastelColors = ["#FFC3A0", "#C6E2FF", "#D7FFC6"]; 
 
             macroChartInstance = new Chart(ctx, {
@@ -532,8 +532,7 @@
             });
         }
         
-        // --- RECIPE SAVING & LOADING LOGIC (NEW/UPDATED) ---
-        
+        // --- RECIPE SAVING & LOADING LOGIC (Unchanged) ---
         function saveRecipe() {
             let savedRecipes = JSON.parse(localStorage.getItem('nutrifind_recipes') || '[]');
             const currentIngredients = Array.from(document.querySelectorAll('.ingredient-row .query'))
@@ -550,7 +549,6 @@
                 return; 
             }
             
-            // Generate a unique, simple ID for deletion
             const newRecipeId = Date.now(); 
 
             const newRecipe = {
@@ -565,7 +563,7 @@
             localStorage.setItem('nutrifind_recipes', JSON.stringify(savedRecipes));
 
             alert(`Recipe "${newRecipe.name}" saved successfully!`);
-            renderSavedRecipes(savedRecipes); // Rerender the list immediately
+            renderSavedRecipes(savedRecipes); 
         }
         
         function loadSavedRecipes() {
@@ -576,7 +574,7 @@
         function renderSavedRecipes(recipes) {
             const listContainer = document.getElementById('savedRecipesList');
             const card = document.getElementById('savedRecipesCard');
-            listContainer.innerHTML = ''; // Clear previous content
+            listContainer.innerHTML = ''; 
 
             if (recipes.length === 0) {
                 card.style.display = 'none';
@@ -613,25 +611,16 @@
         
         function deleteRecipe(id) {
             let savedRecipes = JSON.parse(localStorage.getItem('nutrifind_recipes') || '[]');
-            
-            // Filter out the recipe with the matching ID
             savedRecipes = savedRecipes.filter(recipe => recipe.id !== id);
-            
             localStorage.setItem('nutrifind_recipes', JSON.stringify(savedRecipes));
-            
-            renderSavedRecipes(savedRecipes); // Re-render the list
+            renderSavedRecipes(savedRecipes); 
             alert('Recipe deleted successfully.');
         }
 
 
         // --- UNIT CONVERSION (Unchanged) ---
         const CONVERSION_FACTORS = {
-            'ml': 1,
-            'tsp': 4.92892, 
-            'tbsp': 14.7868, 
-            'fl_oz': 29.5735, 
-            'cup': 236.588, 
-            'l': 1000 
+            'ml': 1, 'tsp': 4.92892, 'tbsp': 14.7868, 'fl_oz': 29.5735, 'cup': 236.588, 'l': 1000 
         };
 
         function convertUnit() {
@@ -639,7 +628,6 @@
             const fromUnit = document.getElementById('convertFrom').value;
             const toUnit = document.getElementById('convertTo').value;
             const resultDisplay = document.getElementById('conversionResult');
-            
             const amount = parseFloat(amountInput.value);
 
             if (isNaN(amount) || amount <= 0) {
@@ -649,7 +637,6 @@
 
             const baseUnitFactor = CONVERSION_FACTORS[fromUnit];
             const amountInML = amount * baseUnitFactor;
-
             const targetUnitFactor = CONVERSION_FACTORS[toUnit];
             const result = amountInML / targetUnitFactor;
             
@@ -659,16 +646,14 @@
             resultDisplay.textContent = `${amount.toFixed(2)} ${fromUnitLabel} = ${result.toFixed(2)} ${toUnitLabel}`;
         }
         
-        // --- COPY & SHARE UTILITIES (Unchanged) ---
+        // --- COPY & SHARE UTILITIES (UPDATED) ---
         function copyIngredients() {
             const rows = document.querySelectorAll('.ingredient-row');
             let ingredientsList = [];
             rows.forEach(row => {
                 const queryInput = row.querySelector('.query');
                 const query = queryInput.value.trim();
-                if (query) {
-                    ingredientsList.push(query);
-                }
+                if (query) { ingredientsList.push(query); }
             });
             const textToCopy = ingredientsList.join('\n');
             if (textToCopy.length === 0) { return; }
@@ -687,22 +672,49 @@
                 console.error('Could not copy ingredients: ', err);
             }
         }
+        
         function copyTable() { 
-            const tableText = "Nutrition Facts\n" + document.getElementById("nutritionTable").innerText;
+            const recipeName = document.querySelector('h2.text-xl').textContent.includes('Total Recipe') 
+                               ? 'Recipe Summary' : document.querySelector('h2.text-xl').textContent;
+
+            // Header includes the website title and URL
+            const header = `[${WEBSITE_TITLE}] - ${recipeName}\n${WEBSITE_URL}\n---\n`;
+            
+            const tableText = document.getElementById("nutritionTable").innerText;
+            const textToCopy = header + tableText;
+            
             try {
                 const textarea = document.createElement('textarea');
-                textarea.value = tableText;
+                textarea.value = textToCopy;
                 document.body.appendChild(textarea);
                 textarea.select();
                 document.execCommand('copy');
                 document.body.removeChild(textarea);
+                
+                const copyBtn = document.querySelector('button[onclick="copyTable()"]');
+                const originalText = copyBtn.textContent;
+                copyBtn.textContent = 'Copied!';
+                setTimeout(() => {
+                    copyBtn.textContent = originalText;
+                }, 1500);
+
             } catch (err) { console.error('Could not copy text: ', err); }
         }
+
         async function shareTable() { 
-            const tableText = "Check out my recipe nutrition facts from NutriFind:\n" + document.getElementById("nutritionTable").innerText;
+            const tableText = document.getElementById("nutritionTable").innerText;
+            // Body of the message encourages users to check out the site
+            const shareBody = `Check out your calories and macros too! Here are my recipe facts:\n---\n${tableText}\n---\nCalculate your own recipes instantly. Visit ${WEBSITE_URL}`;
+
             if (navigator.share) { 
-                await navigator.share({ title: 'NutriFind Recipe Facts', text: tableText }); 
-            } else { console.log("Sharing not supported."); }
+                await navigator.share({ 
+                    title: `${WEBSITE_TITLE} Results`, 
+                    text: shareBody,
+                    url: WEBSITE_URL 
+                }); 
+            } else { 
+                alert(`Sharing not supported. Please use the 'Copy Nutrition Table' button or visit ${WEBSITE_URL}`); 
+            }
         }
     </script>
 </body>
