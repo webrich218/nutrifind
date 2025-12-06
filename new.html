@@ -703,79 +703,65 @@
             } catch (err) { console.error('Could not copy text: ', err); }
         }
 
-        // --- UTILITY: Share Table (REVISED TO IMAGE SHARING WITH PROPER TEXT) ---
+        // --- UTILITY: Share Table (FINAL REVISION: Targeted Image Capture & Robust Link) ---
         async function shareTable() { 
             if (!window.lastCalculatedTotals) {
                 alert("Please calculate the recipe nutrition before sharing.");
                 return;
             }
 
-            const resultsCard = document.getElementById('resultsCard');
+            // Target the specific nutrition label element for clean capture
+            const captureTarget = document.querySelector('.nutrition-label');
             
-            // 1. Temporarily hide elements we don't want in the image (buttons, macro chart header)
+            // 1. Temporarily hide the share/copy/save buttons while generating the image
             const buttonsDiv = document.querySelector('.share-buttons');
-            const chartHeader = document.querySelector('#resultsCard > div.mt-8 > h3');
-            const macroChart = document.getElementById('macroChart');
-            
             buttonsDiv.style.display = 'none';
-            if (chartHeader) chartHeader.style.display = 'none';
-            if (macroChart) macroChart.style.display = 'none';
+
+            // 2. Define the content of the accompanying text (must include URL)
+            const t = window.lastCalculatedTotals;
+            const shareText = `Check out my recipe nutrition facts from ${WEBSITE_TITLE} (Calories: ${Math.round(t.cal)}, Protein: ${t.protein.toFixed(1)}g). Calculate your own: ${WEBSITE_URL}`;
+
 
             try {
-                // 2. Use html2canvas to capture the nutrition label area (Results Card without Chart/Buttons)
-                const canvas = await html2canvas(resultsCard, {
-                    scale: 2, 
-                    backgroundColor: getComputedStyle(resultsCard).backgroundColor, 
-                    // Set a small padding to ensure the edges are crisp and not cut off
-                    width: resultsCard.offsetWidth - 20, 
-                    height: document.getElementById('nutritionTable').offsetHeight + 100, // Only capture up to the nutrition label
+                // 3. Use html2canvas to capture ONLY the nutrition label div
+                const canvas = await html2canvas(captureTarget, {
+                    scale: 2, // Use a higher scale for better resolution
+                    backgroundColor: getComputedStyle(captureTarget).backgroundColor || 'white', 
                     logging: false,
                 });
 
-                // Convert canvas to a Blob and then a File
+                // 4. Convert canvas to a Blob and then a File
                 const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
                 const file = new File([blob], 'NutriFind_Recipe.png', { type: 'image/png' });
 
-                // 3. Generate the text in the requested format, ensuring the site URL is in the text field
-                // This text will accompany the image and ensure a clickable link is always present.
-                const t = window.lastCalculatedTotals;
-                const shareText = `Check out my recipe nutrition facts from ${WEBSITE_TITLE}:\n\n` +
-                                  `Calories - ${Math.round(t.cal)}\n` +
-                                  `Total Fat - ${t.fat.toFixed(1)} g\n` +
-                                  `Protein - ${t.protein.toFixed(1)} g\n` +
-                                  `Total Carbohydrate - ${t.carb.toFixed(1)} g\n\n` + // Shortened list for body text
-                                  `Calculate your own instantly. Visit ${WEBSITE_URL}`;
-
-
+                
+                // 5. Execute native sharing with both the File and the text/URL
                 if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                    // Share the file and the robust text/url
                     await navigator.share({
                         files: [file],
                         title: `${WEBSITE_TITLE} Results`,
-                        text: shareText, // This provides the rich text and clickable URL
-                        url: WEBSITE_URL 
+                        text: shareText, // Crucial for including the descriptive text and link
+                        url: WEBSITE_URL // Crucial for rich link preview
                     });
                 } else if (navigator.share) {
-                    // Fallback to text/URL only if file sharing is not supported
+                    // Fallback: Share Text and URL only
                     await navigator.share({
                         title: `${WEBSITE_TITLE} Results`,
                         text: shareText,
                         url: WEBSITE_URL
                     });
-                    alert("Image sharing not fully supported on this device/browser. Sharing text and link instead.");
+                    alert("Image sharing failed on this device/browser. Sharing text and link instead.");
                 } else {
                     // General fallback
-                    alert(`Sharing not supported. Use the 'Copy Nutrition Table' button or visit ${WEBSITE_URL}`); 
+                    alert(`Sharing not supported. Please copy the table text or visit ${WEBSITE_URL}`); 
                 }
 
             } catch (error) {
                 console.error('Error during image creation and sharing:', error);
                 alert('Could not generate image for sharing. Please use the "Copy Nutrition Table" button.');
             } finally {
-                // 4. Clean up: Restore original visibility for all elements
+                // 6. Clean up: Restore original visibility
                 buttonsDiv.style.display = 'flex'; 
-                if (chartHeader) chartHeader.style.display = 'block';
-                if (macroChart) macroChart.style.display = 'block';
             }
         }
     </script>
