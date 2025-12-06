@@ -705,65 +705,39 @@
             } catch (err) { console.error('Could not copy text: ', err); }
         }
 
-        // --- UTILITY: Share Table (FINAL: Image + Text, URL field Omitted) ---
+        // --- UTILITY: Share Table (FINAL STABLE: TEXT-ONLY, LINK MENTIONED ONCE) ---
         async function shareTable() { 
             if (!window.lastCalculatedTotals) {
                 alert("Please calculate the recipe nutrition before sharing.");
                 return;
             }
-
-            // Target the specific nutrition label element for clean capture
-            const captureTarget = document.querySelector('.nutrition-label');
             
-            // 1. Temporarily hide the share/copy/save buttons while generating the image
-            const buttonsDiv = document.querySelector('.share-buttons');
-            buttonsDiv.style.display = 'none';
+            const t = window.lastCalculatedTotals;
+            
+            // 1. Generate the clean, templated text. The link is mentioned once at the end of the first line.
+            const shareBody = `Check out my recipe nutrition facts from ${WEBSITE_TITLE}. Get your own results here: ${WEBSITE_URL}\n\n` +
+                              // The detailed data follows immediately after a double line break
+                              `*Calories - ${Math.round(t.cal)}*\n` +
+                              `Total Fat - ${t.fat.toFixed(1)} g\n` +
+                              `Saturated Fat - ${t.sat_fat.toFixed(1)} g\n` +
+                              `Sodium - ${Math.round(t.sodium)} mg\n` +
+                              `Total Carbohydrate - ${t.carb.toFixed(1)} g\n` +
+                              `Dietary Fiber - ${t.fiber.toFixed(1)} g\n` +
+                              `Total Sugars - ${t.sugar.toFixed(1)} g\n` +
+                              `Protein - ${t.protein.toFixed(1)} g`;
 
-            // 2. Define the content of the accompanying text.
-            // We include the URL here, so it is part of the message text itself, not a separate link preview.
-            const shareText = `Check out my recipe nutrition facts from ${WEBSITE_TITLE}. Visit ${WEBSITE_URL}`;
-
-
-            try {
-                // 3. Use html2canvas to capture ONLY the nutrition label div
-                const canvas = await html2canvas(captureTarget, {
-                    scale: 2, // Use a higher scale for better resolution
-                    backgroundColor: getComputedStyle(captureTarget).backgroundColor || 'white', 
-                    logging: false,
-                });
-
-                // 4. Convert canvas to a Blob and then a File
-                const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
-                const file = new File([blob], 'NutriFind_Recipe.png', { type: 'image/png' });
-
-                
-                // 5. Execute native sharing with the File and the text, OMITTING the 'url' field
-                if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                    await navigator.share({
-                        files: [file],
-                        title: `${WEBSITE_TITLE} Results`,
-                        text: shareText, // The text contains the URL manually
-                        // URL FIELD IS OMITTED HERE
+            if (navigator.share) { 
+                try {
+                    await navigator.share({ 
+                        title: `${WEBSITE_TITLE} Results`, 
+                        text: shareBody,
+                        url: WEBSITE_URL // Included here to trigger a rich preview if the platform supports it
                     });
-                } else if (navigator.share) {
-                    // Fallback to text only if file sharing is not supported
-                    await navigator.share({
-                        title: `${WEBSITE_TITLE} Results`,
-                        text: shareText,
-                        url: WEBSITE_URL // Use URL field for text-only fallback
-                    });
-                    alert("Image sharing not fully supported. Sharing text and link instead.");
-                } else {
-                    // General fallback
-                    alert(`Sharing not supported. Please copy the table text or visit ${WEBSITE_URL}`); 
+                } catch (error) {
+                    console.error('Sharing failed or cancelled:', error);
                 }
-
-            } catch (error) {
-                console.error('Error during image creation and sharing:', error);
-                alert('Could not generate image for sharing. Please use the "Copy Nutrition Table" button.');
-            } finally {
-                // 6. Clean up: Restore original visibility
-                buttonsDiv.style.display = 'flex'; 
+            } else { 
+                alert(`Sharing not supported. Please use the 'Copy Nutrition Table' button or visit ${WEBSITE_URL}`); 
             }
         }
     </script>
