@@ -1,0 +1,132 @@
+/* --- Theme Variables --- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+:root {
+    --primary: #0a7c36;
+    --background: #f4f7f8;
+    --text-color: #222;
+    --card-bg: white;
+    --border-color: #e5e7eb;
+    --accent: #222;
+}
+
+.dark {
+    --background: #1f2937;
+    --text-color: #f3f4f6;
+    --card-bg: #374151;
+    --border-color: #4b5563;
+    --accent: #f3f4f6;
+}
+
+/* --- Global Styles using Variables --- */
+body { 
+    font-family: 'Inter', sans-serif;
+    background: var(--background);
+    color: var(--text-color);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    transition: background-color 0.3s;
+}
+
+header { background: var(--card-bg);
+}
+.bg-white { background-color: var(--card-bg) !important;
+}
+.border-gray-100, .border-gray-200 { border-color: var(--border-color);
+}
+.text-gray-800, .text-gray-700, .text-gray-600, .text-gray-500 { color: var(--text-color) !important;
+}
+
+/* Input Colors */
+input, select {
+    background-color: var(--background);
+    color: var(--text-color);
+    border-color: var(--border-color);
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+/* Custom Nutrition Label Styling */
+.nutrition-label {
+    width: 100%;
+    border: 2px solid var(--accent);
+    padding: 5px 15px;
+    margin-top: 20px;
+    background: var(--card-bg);
+    transition: border-color 0.3s, background-color 0.3s;
+}
+.label-header { 
+    font-size: 28px;
+    font-weight: 900; 
+    margin: 5px 0 0;
+    padding-bottom: 5px;
+    border-bottom: 10px solid var(--accent); 
+    transition: border-color 0.3s;
+}
+.line { 
+    padding: 4px 0;
+    border-bottom: 1px solid var(--accent); 
+    overflow: hidden; 
+    font-size: 14px; 
+    transition: border-color 0.3s;
+}
+.line span { float: right; font-weight: bold;
+}
+.line.thick { border-bottom-width: 3px;
+}
+.line.no-border { border-bottom: none;
+}
+.line.indent { margin-left: 15px;
+}
+
+/* Custom Styles for Buttons */
+.calc-btn, .share-btn, .add-btn, .copy-ingredients-btn { 
+    background-color: var(--primary);
+    color: white; 
+    transition: background-color 0.2s;
+}
+.calc-btn:hover, .share-btn:hover, .add-btn:hover, .copy-ingredients-btn:hover { 
+    background-color: #08662a;
+}
+.delete-btn {
+    background-color: #dc2626;
+    color: white;
+    transition: background-color 0.2s;
+}
+.delete-btn:hover {
+    background-color: #b91c1c;
+}
+
+/* --- Theme Toggle Button --- */
+.theme-toggle-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    background-color: var(--primary);
+    color: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s, transform 0.1s;
+}
+.theme-toggle-btn:active {
+    transform: scale(0.95);
+}
+
+/* Section styles */
+.info-section {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-top: 1px solid var(--border-color);
+}
+.saved-recipe-item {
+    border: 1px solid var(--border-color);
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 0.75rem;
+    background-color: var(--background);
+}
