@@ -32,11 +32,18 @@ body {
 }
 
 header { background: var(--card-bg); }
-/* REMOVED: .bg-white override, as it was conflicting with dark mode logic */
 .border-gray-100, .border-gray-200 { border-color: var(--border-color); }
 
-/* Ensure text colors follow the theme variable (removed !important for better Tailwind dark mode interoperability) */
-.text-gray-800, .text-gray-700, .text-gray-600, .text-gray-500 { color: var(--text-color); } 
+/* --- FIX: Text Readability in Dark Mode --- */
+/* This rule forces common Tailwind gray text classes to use the theme's dynamic text color. */
+/* The !important is necessary here to override Tailwind's default light-mode utility classes, */
+/* ensuring the text is readable on the dark cards. */
+.text-gray-800, 
+.text-gray-700, 
+.text-gray-600, 
+.text-gray-500 { 
+    color: var(--text-color) !important; 
+} 
 
 /* Input Colors */
 input, select {
@@ -68,6 +75,7 @@ input, select {
     border-bottom: 1px solid var(--accent); 
     overflow: hidden; 
     font-size: 14px; 
+    /* The text color for the line content will be handled by the .text-gray-X override above */
     transition: border-color 0.3s;
 }
 .line span { float: right; font-weight: bold; }
