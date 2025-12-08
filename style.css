@@ -1,5 +1,7 @@
 /* --- Theme Variables --- */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+/* Default (Light) Theme */
 :root {
     --primary: #0a7c36;
     --background: #f4f7f8;
@@ -9,6 +11,7 @@
     --accent: #222;
 }
 
+/* Dark Theme */
 .dark {
     --background: #1f2937;
     --text-color: #f3f4f6;
@@ -28,14 +31,12 @@ body {
     transition: background-color 0.3s;
 }
 
-header { background: var(--card-bg);
-}
-.bg-white { background-color: var(--card-bg) !important;
-}
-.border-gray-100, .border-gray-200 { border-color: var(--border-color);
-}
-.text-gray-800, .text-gray-700, .text-gray-600, .text-gray-500 { color: var(--text-color) !important;
-}
+header { background: var(--card-bg); }
+/* REMOVED: .bg-white override, as it was conflicting with dark mode logic */
+.border-gray-100, .border-gray-200 { border-color: var(--border-color); }
+
+/* Ensure text colors follow the theme variable (removed !important for better Tailwind dark mode interoperability) */
+.text-gray-800, .text-gray-700, .text-gray-600, .text-gray-500 { color: var(--text-color); } 
 
 /* Input Colors */
 input, select {
@@ -69,14 +70,10 @@ input, select {
     font-size: 14px; 
     transition: border-color 0.3s;
 }
-.line span { float: right; font-weight: bold;
-}
-.line.thick { border-bottom-width: 3px;
-}
-.line.no-border { border-bottom: none;
-}
-.line.indent { margin-left: 15px;
-}
+.line span { float: right; font-weight: bold; }
+.line.thick { border-bottom-width: 3px; }
+.line.no-border { border-bottom: none; }
+.line.indent { margin-left: 15px; }
 
 /* Custom Styles for Buttons */
 .calc-btn, .share-btn, .add-btn, .copy-ingredients-btn { 
@@ -115,26 +112,6 @@ input, select {
 }
 .theme-toggle-btn:active {
     transform: scale(0.95);
-}
-
-/* --- Toast Notification (Snackbar) --- */
-.toast-notification {
-    position: fixed;
-    bottom: 0px; /* Hidden state */
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: var(--primary); 
-    color: white;
-    padding: 12px 20px;
-    border-radius: 8px;
-    z-index: 2000;
-    opacity: 0;
-    transition: opacity 0.3s, bottom 0.3s;
-    font-size: 14px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-.dark .toast-notification {
-    background-color: #4CAF50; /* Clear green for dark mode contrast */
 }
 
 /* Section styles */
