@@ -46,9 +46,16 @@
                          class="w-full h-auto object-cover">
                 </div>
                 
-                <p class="text-lg font-bold text-gray-800 dark:text-gray-100 mb-4 p-2 bg-yellow-100 dark:bg-yellow-800 rounded-md border border-yellow-200 dark:border-yellow-700">
-                    Yields: 8 Servings (1 Slice per Serving)
-                </p>
+                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4">
+                    <p class="text-lg font-bold text-gray-800 dark:text-gray-100 p-2 bg-yellow-100 dark:bg-yellow-800 rounded-md border border-yellow-200 dark:border-yellow-700 mb-3 sm:mb-0">
+                        Yields: 8 Servings (1 Slice per Serving)
+                    </p>
+                    
+                    <button id="shareRecipeBtn" class="share-btn py-2 px-4 font-medium rounded-lg text-sm flex items-center justify-center" onclick="shareRecipeLink()">
+                        🔗 Share This Recipe
+                    </button>
+                </div>
+
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     
@@ -137,6 +144,25 @@
 
     <script src="script.js"></script>
     <script>
+        // Function to handle sharing the link to this specific recipe page
+        function shareRecipeLink() {
+            const url = window.location.href;
+            const title = "Check out this Banana Brownies recipe from NutriFind!";
+            const text = "I found the nutrition facts for these amazing brownies using NutriFind's calculator. Try it!";
+
+            if (navigator.share) {
+                navigator.share({
+                    title: title,
+                    text: text,
+                    url: url,
+                }).catch(error => console.error('Error sharing:', error));
+            } else {
+                // Fallback for browsers that don't support the Web Share API (e.g., desktop)
+                navigator.clipboard.writeText(url);
+                alert("Link copied to clipboard! Share the Banana Brownies recipe: " + url);
+            }
+        }
+
         // Initialize theme on this page as well
         document.addEventListener('DOMContentLoaded', () => {
             if (typeof initializeTheme === 'function') {
