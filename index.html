@@ -263,19 +263,19 @@
                 
                 <ul class="list-disc list-inside text-sm text-gray-600 space-y-2 ml-4">
                     <li>
-                        **Saturated Fat:** A type of fat that tends to be solid at room temperature. High consumption is often linked to increased LDL ("bad") cholesterol levels. Your calculation tracks this specifically.
+                        <b>Saturated Fat:</b> A type of fat that tends to be solid at room temperature. High consumption is often linked to increased LDL ("bad") cholesterol levels. Your calculation tracks this specifically.
                     </li>
                     <li>
-                        **Sodium (mg):** Essential for fluid balance, but excessive intake can contribute to high blood pressure. The recommended daily limit is generally around 2,300 mg.
+                        <b>Sodium (mg):</b> Essential for fluid balance, but excessive intake can contribute to high blood pressure. The recommended daily limit is generally around 2,300 mg.
                     </li>
                     <li>
-                        **Dietary Fiber:** Crucial for digestive health and helps control blood sugar levels. Look for whole grains, fruits, and vegetables to increase your fiber intake.
+                        <b>Dietary Fiber:</b> Crucial for digestive health and helps control blood sugar levels. Look for whole grains, fruits, and vegetables to increase your fiber intake.
                     </li>
                     <li>
-                        **Protein (g):** The building block for muscle, skin, and hormones. It's essential for satiety and tissue repair.
+                        <b>Protein (g):</b> The building block for muscle, skin, and hormones. It's essential for satiety and tissue repair.
                     </li>
                     <li>
-                        **Total Sugars (g):** Includes naturally occurring sugars (like in fruit) and added sugars. Monitoring this total is key for overall health.
+                        <b>Total Sugars (g):</b> Includes naturally occurring sugars (like in fruit) and added sugars. Monitoring this total is key for overall health.
                     </li>
                 </ul>
                 <p class="text-xs mt-4 text-gray-500">
@@ -290,7 +290,7 @@
                 <p class="text-xs text-gray-500 leading-relaxed">
                     <b>Data Privacy:</b> We are committed to maximizing user privacy. <b>NutriFind does not collect, store, or transmit any personally identifiable information (PII) or sensitive user data.</b> This includes names, email addresses, IP addresses, or specific ingredient search history. Recipes are saved using your browser's <b>Local Storage</b> and are stored <b>entirely on your device</b>.                    <br><br>
                     <h4 class="font-bold mb-2 text-red-600">HEALTH DISCLAIMER (CRITICAL)</h4>
-                    The nutrition information provided by NutriFind is for **informational and educational purposes only**. The results are estimates based on third-party data and should **NOT** be considered a substitute for professional medical advice, diagnosis, or treatment from a qualified healthcare provider or registered dietitian. Accuracy is not guaranteed and results may vary.
+                    The nutrition information provided by NutriFind is for <b>informational and educational purposes only</b>. The results are estimates based on third-party data and should **NOT** be considered a substitute for professional medical advice, diagnosis, or treatment from a qualified healthcare provider or registered dietitian. Accuracy is not guaranteed and results may vary.
                 </p>
             </div>
 
@@ -594,10 +594,10 @@
                         <div>
                             <h4 class="font-bold text-lg">${recipe.name}</h4>
                             <p class="text-sm text-gray-600">
-                                **Cal:** ${Math.round(recipe.totals.cal)} | 
-                                **P:** ${recipe.totals.protein.toFixed(1)}g | 
-                                **C:** ${recipe.totals.carb.toFixed(1)}g | 
-                                **F:** ${recipe.totals.fat.toFixed(1)}g 
+                                <b>Cal:</b> ${Math.round(recipe.totals.cal)} | 
+                                <b>Protein:</b> ${recipe.totals.protein.toFixed(1)}g | 
+                                <b>Carbs:</b> ${recipe.totals.carb.toFixed(1)}g | 
+                                <b>Fat:</b> ${recipe.totals.fat.toFixed(1)}g 
                             </p>
                             <p class="text-xs text-gray-500 mt-1 italic">
                                 Ingredients: ${ingredientsPreview}
@@ -745,3 +745,4 @@ async function shareTable() {
     </script>
 </body>
 </html>
+
