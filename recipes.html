@@ -1,107 +1,178 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🥗</text></svg>">
-    
-    <title>Recipes | Banana Brownies - NutriFind</title>
-    <meta name="description" content="Discover sample recipes with full nutrition facts, calculated by the NutriFind tool. View the recipe for healthy Banana Brownies." />
-    <meta name="author" content="NutriFind" />
-    
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2553227651137870"
-        crossorigin="anonymous"></script>
-        
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <link rel="stylesheet" href="style.css"> 
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🥗</text></svg>">
+    
+    <title>Recipes | Banana Brownies - NutriFind</title>
+    <meta name="description" content="Discover sample recipes with full nutrition facts, calculated by the NutriFind tool. View the recipe for healthy Banana Brownies." />
+    <meta name="author" content="NutriFind" />
+    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2553227651137870"
+        crossorigin="anonymous"></script>
+        
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="stylesheet" href="style.css"> 
 
 </head>
 <body class="min-h-screen flex flex-col items-center">
-    
-    <header class="text-center p-4 w-full shadow-md" style="background: var(--card-bg);">
-        <h1 class="text-3xl font-extrabold text-gray-800 dark:text-gray-100">🥗 NutriFind Recipe Calculator</h1>
-        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Analyze the nutrition of your recipes using natural language.</p>
-        
-        <nav class="mt-4 flex justify-center space-x-4 text-sm font-medium">
-            <a href="index.html" class="text-gray-600 dark:text-gray-200 hover:text-green-700 dark:hover:text-green-400">Calculator</a>
-            <a href="recipes.html" class="text-green-700 font-bold border-b-2 border-green-700 dark:text-green-400 dark:border-green-400">Recipes</a>
-            <a href="blog.html" class="text-gray-600 dark:text-gray-200 hover:text-green-700 dark:hover:text-green-400">Blog</a>
-            <a href="about.html" class="text-gray-600 dark:text-gray-200 hover:text-green-700 dark:hover:text-green-400">About</a>
-        </nav>
-    </header>
-    
-    <div class="container p-4 w-full max-w-3xl flex-grow">
-        
-                <div class="p-4 rounded-xl shadow-lg mt-6 dark:text-gray-200">
-            <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-6 pb-2 text-center">Recipes & Sample Calculations</h2>
-            
-            <div class="border p-4 rounded-lg bg-gray-100 dark:bg-green-700 border-gray-200 dark:border-green-700 text-gray-700" style="background: var(--card-bg);">
-                
-                <h3 class="text-2xl font-bold text-green-700 dark:text-green-400 mb-4">Banana Brownies</h3>
-                
-                <div class="mb-6 rounded-lg overflow-hidden shadow-md">
-                    <img src="banana-brownies.png" 
-                         alt="Delicious Banana Brownies topped with chocolate chips" 
-                         class="w-full h-auto object-cover">
-                </div>
-                
-                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4">
-                                        <p class="text-lg font-bold text-gray-800 dark:text-gray-100">Yields: 8 Servings (1 Slice per Serving)</p>
-                    
-                    <button id="shareRecipeBtn" class="share-btn py-2 px-4 font-medium rounded-lg text-sm flex items-center justify-center" onclick="shareRecipeLink()">
-                        🔗 Share This Recipe
-                    </button>
-                </div>
+    
+    <header class="text-center p-4 w-full shadow-md" style="background: var(--card-bg);">
+        <h1 class="text-3xl font-extrabold text-gray-800 dark:text-gray-100">🥗 NutriFind Recipe Calculator</h1>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Analyze the nutrition of your recipes using natural language.</p>
+        
+        <nav class="mt-4 flex justify-center space-x-4 text-sm font-medium">
+            <a href="index.html" class="text-gray-600 dark:text-gray-200 hover:text-green-700 dark:hover:text-green-400">Calculator</a>
+            <a href="recipes.html" class="text-green-700 font-bold border-b-2 border-green-700 dark:text-green-400 dark:border-green-400">Recipes</a>
+            <a href="blog.html" class="text-gray-600 dark:text-gray-200 hover:text-green-700 dark:hover:text-green-400">Blog</a>
+            <a href="about.html" class="text-gray-600 dark:text-gray-200 hover:text-green-700 dark:hover:text-green-400">About</a>
+        </nav>
+    </header>
+    
+    <div class="container p-4 w-full max-w-3xl flex-grow">
+        
+        <div>
+            <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-6 pb-2 text-center">Recipes & Sample Calculations</h2>
+            
+            <div class="border p-4 rounded-lg bg-gray-100 dark:bg-green-700 border-gray-200 dark:border-green-700 text-gray-700"style="background: var(--card-bg);">
+                
+                <h3 class="text-2xl font-bold text-green-700 dark:text-green-400 mb-4">Banana Brownies</h3>
+                
+                <div class="mb-6 rounded-lg overflow-hidden shadow-md">
+                    <img src="banana-brownies.png" 
+                         alt="Delicious Banana Brownies topped with chocolate chips" 
+                         class="w-full h-auto object-cover">
+                </div>
+                
+                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4">
+                    <p class="text-lg font-bold text-gray-800">Yields: 8 Servings (1 Slice per Serving)</p>
+                    
+                    <button id="shareRecipeBtn" class="share-btn py-2 px-4 font-medium rounded-lg text-sm flex items-center justify-center" onclick="shareRecipeLink()">
+                        🔗 Share This Recipe
+                    </button>
+                </div>
 
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    
-                    <div>
-                                                <h4 class="text-xl font-semibold mb-2 text-gray-700 dark:text-gray-200">Ingredients (Total Recipe)</h4>
-                        <ul class="list-disc list-inside text-sm text-gray-600 dark:text-gray-800 space-y-1 ml-4">
-                            <li>300g ripe banana</li>
-                            <li>1/3 cup Dark Chocolate chips</li>
-                            <li>100g Peanut butter</li>
-                            <li>25g cocoa powder (unsweetened)</li>
-                            <li>2 tbsp Milk</li>
-                        </ul>
-                    </div>
-                    
-                    <div>
-                                                <h4 class="text-xl font-semibold mb-2 text-gray-700 dark:text-gray-200">Instructions</h4>
-                        <ol class="list-decimal list-inside text-sm text-gray-600 dark:text-gray-800 space-y-1 ml-4">
-                            <li>Mash the bananas thoroughly.</li>
-                            <li>In a separate bowl, warm the peanut butter slightly in the microwave to make it easier to blend.</li>
-                            <li>Combine mashed banana, peanut butter, cocoa powder, half of the chocolate chips, and milk. Mix until just combined.</li>
-                            <li>Transfer the batter into a small baking pan (e.g., 8x8 in).</li>
-                            <li>Top with the rest of the chocolate chips.</li>
-                            <li>Bake in a pre-heated oven at 180°C (350°F) for approximately 20 minutes.</li>
-                            <li>Chill completely before cutting and serving for the best texture.</li>
-                        </ol>
-                    </div>
-                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    
+                    <div>
+                        <h4 class="text-xl font-semibold mb-2 text-gray-700 dark:text-gray-200">Ingredients (Total Recipe)</h4>
+                        <ul class="list-disc list-inside text-sm text-gray-600 dark:text-gray-800 space-y-1 ml-4">
+                            <li>300g ripe banana</li>
+                            <li>1/3 cup Dark Chocolate chips</li>
+                            <li>100g Peanut butter</li>
+                            <li>25g cocoa powder (unsweetened)</li>
+                            <li>2 tbsp Milk</li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h4 class="text-xl font-semibold mb-2 text-gray-700 dark:text-gray-800">Instructions</h4>
+                        <ol class="list-decimal list-inside text-sm text-gray-600 dark:text-gray-800 space-y-1 ml-4">
+                            <li>Mash the bananas thoroughly.</li>
+                            <li>In a separate bowl, warm the peanut butter slightly in the microwave to make it easier to blend.</li>
+                            <li>Combine mashed banana, peanut butter, cocoa powder, half of the chocolate chips, and milk. Mix until just combined.</li>
+                            <li>Transfer the batter into a small baking pan (e.g., 8x8 in).</li>
+                            <li>Top with the rest of the chocolate chips.</li>
+                            <li>Bake in a pre-heated oven at 180°C (350°F) for approximately 20 minutes.</li>
+                            <li>Chill completely before cutting and serving for the best texture.</li>
+                        </ol>
+                    </div>
+                </div>
 
-                <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                                                <h4 class="text-xl font-semibold mb-3 text-gray-700 dark:text-gray-200">Total Recipe Nutrition</h4>
-                        <div class="nutrition-label max-w-sm">
-                            <h3 class="label-header">Total Facts</h3>
-                            <div id="recipeNutritionTotal">
-                                <div class="line thick font-bold text-base">Calories <span>1140</span></div>
-                                <div class="line thick font-bold text-base">Total Fat <span>68.0 g</span></div>
-                                <div class="line indent">Saturated Fat <span>18.0 g</span></div>
-                                <div class="line thick font-bold text-base">Sodium <span>250 mg</span></div>
-                                <div class="line thick font-bold text-base">Total Carb <span>117.0 g</span></div>
-                                <div class="line indent">Dietary Fiber <span>14.0 g</span></div>
-                                <div class="line indent">Total Sugars <span>65.0 g</span></div>
-                                <div class="line thick font-bold text-base no-border">Protein <span>37.0 g</span></div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div>
-                                                <h4 class="text-xl font-semibold mb-3 text-gray-700 dark:text-gray-200">Per Serving (1 Slice)</h4>
-                         <div class="nutrition-label max-w-sm">
-                            <h3 class="label
+                <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="text-xl font-semibold mb-3 text-gray-700 dark:text-gray-800">Total Recipe Nutrition</h4>
+                        <div class="nutrition-label max-w-sm">
+                            <h3 class="label-header">Total Facts</h3>
+                            <div id="recipeNutritionTotal">
+                                <div class="line thick font-bold text-base">Calories <span>1140</span></div>
+                                <div class="line thick font-bold text-base">Total Fat <span>68.0 g</span></div>
+                                <div class="line indent">Saturated Fat <span>18.0 g</span></div>
+                                <div class="line thick font-bold text-base">Sodium <span>250 mg</span></div>
+                                <div class="line thick font-bold text-base">Total Carb <span>117.0 g</span></div>
+                                <div class="line indent">Dietary Fiber <span>14.0 g</span></div>
+                                <div class="line indent">Total Sugars <span>65.0 g</span></div>
+                                <div class="line thick font-bold text-base no-border">Protein <span>37.0 g</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4 class="text-xl font-semibold mb-3 text-gray-700 dark:text-gray-800">Per Serving (1 Slice)</h4>
+                         <div class="nutrition-label max-w-sm">
+                            <h3 class="label-header">Per Serving</h3>
+                            <div id="recipeNutritionServing">
+                                <div class="line thick font-bold text-base">Calories <span>143</span></div>
+                                <div class="line thick font-bold text-base">Total Fat <span>8.5 g</span></div>
+                                <div class="line indent">Saturated Fat <span>2.3 g</span></div>
+                                <div class="line thick font-bold text-base">Sodium <span>31 mg</span></div>
+                                <div class="line thick font-bold text-base">Total Carb <span>14.6 g</span></div>
+                                <div class="line indent">Dietary Fiber <span>1.8 g</span></div>
+                                <div class="line indent">Total Sugars <span>8.1 g</span></div>
+                                <div class="line thick font-bold text-base no-border">Protein <span>4.6 g</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-4">
+                    *Nutrition calculated by NutriFind based on ingredients and is an estimate for 8 servings.*
+                </p>
+            </div>
+            <div class="mt-8 p-4 border-t pt-6 border-gray-200 dark:border-gray-600">
+                <h3 class="text-xl font-semibold mb-3 text-gray-700 dark:text-gray-200">More Recipes Coming Soon!</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-300">
+                    Check back soon as we add more helpful and delicious recipes with their full nutrition breakdown, all calculated using the NutriFind tool.
+                </p>
+                <a href="index.html" class="inline-block mt-3 text-green-600 dark:text-green-400 hover:underline text-sm font-medium">Calculate your own recipe now.</a>
+            </div>
+
+        </div>
+        
+    </div>
+    
+    <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle dark mode" onclick="toggleTheme()"></button>
+
+    <footer class="sticky bottom-0 p-4 w-full text-center text-xs text-gray-500 dark:text-gray-300 border-t border-gray-200 mt-auto" style="background: var(--card-bg);">
+        NutriFind © 2025 · Data provided by CalorieNinja API.
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Function to handle sharing the link to this specific recipe page
+        function shareRecipeLink() {
+            const url = window.location.href;
+            const title = "Check out this Banana Brownies recipe from NutriFind!";
+            const text = "I found the nutrition facts for these amazing brownies using NutriFind's calculator. Try it!";
+
+            if (navigator.share) {
+                navigator.share({
+                    title: title,
+                    text: text,
+                    url: url,
+                }).catch(error => console.error('Error sharing:', error));
+            } else {
+                // Fallback for browsers that don't support the Web Share API (e.g., desktop)
+                navigator.clipboard.writeText(url);
+                alert("Link copied to clipboard! Share the Banana Brownies recipe: " + url);
+            }
+        }
+
+        // Initialize theme on this page as well
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof initializeTheme === 'function') {
+                initializeTheme();
+            }
+            if (document.getElementById('themeToggle')) {
+                 // Set initial icon based on theme
+                 const isDark = document.body.classList.contains('dark');
+                 document.getElementById('themeToggle').textContent = isDark ? '🌙' : '☀️';
+            }
+        });
+    </script>
+</body>
+</html>
